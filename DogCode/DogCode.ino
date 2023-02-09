@@ -68,7 +68,7 @@ void loop() {
     delay(600.0-testSpeed);
   }
   for (testPos = 180; testPos >= 0; testPos -= 1) { // goes from 
-    test.write(testPos);            // tell servo to go to position in variable 'pos'
+    test.write(testPos);                            // tell servo to go to position in variable 'pos'
     delay(600.0-testSpeed);
   }
   delay(2000);
