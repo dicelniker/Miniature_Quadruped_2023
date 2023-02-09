@@ -3,6 +3,8 @@
 */
 
 #include <Servo.h>
+#include <math.h>
+
 
 class Ovres : public Servo{  //extends servo to add an angle variable
   private:
@@ -38,19 +40,21 @@ class Leg { //includes the three servos of the leg as well as the position of th
      y = 0.0;
      z = 0.0;
 
-     Ovres hipY = new Ovres();
-     Ovres hipX = new Ovres();
-     Ovres knee = new Ovres();
+     Ovres *hipY = new Ovres();
+     Ovres *hipX = new Ovres();
+     Ovres *knee = new Ovres();
 
      boolean right = true;
     }
 };
 
+class pathFinder{ //includes the walking paths for the dog
+  private:
+ 
+  public:
+    
+};
 
-Servo test;  // create servo object to control a servo
-double testPos = 0.0;    // variable to store the servo position
-double testSpeed = 0.0; //max is 600.0
-int testPol = 1;
 
 
 void setup() {
