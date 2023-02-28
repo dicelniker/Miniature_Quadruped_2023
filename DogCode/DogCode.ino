@@ -4,7 +4,7 @@
 
 #include <Servo.h>
 #include <math.h>
-
+#include <list>
 
 class Ovres : public Servo { //extends servo to add an angle variable
   private:
@@ -44,15 +44,19 @@ class Leg { //includes the three servos of the leg as well as the position of th
       right = onRightQuestionMark;
 
       Ovres *hipY = new Ovres();
-      hipY.write(hipYPin);
+      hipY.attach(hipYPin);
       
       Ovres *hipX = new Ovres();
-      hipX.write(hipXPin);
+      hipX.attach(hipXPin);
       
       Ovres *knee = new Ovres();
-      knee.write(kneePin);
+      knee.attach(kneePin);
 
       boolean right = true;
+    }
+
+    setYZ(int y, int z){
+      
     }
 };
 
@@ -62,18 +66,29 @@ Class Dog {
     Leg FR;
     Leg RR;
     Leg RL;
+
+    list<Leg>legList;
     
   public:
     Dog() {
-      Leg *FL = new Leg(9,7,4,false);
+      Leg *FL = new Leg(9,7,4,false);      
       Leg *FR = new Leg(8,6,2,true);
       Leg *RR = new Leg(10,12,5,true);
       Leg *RL = new Leg(11,13,3,false);
+
+      legList.add(FL);
+      legList.add(FR);
+      legList.add(RR);
+      legList.add(RL);
     }
-    setLegs(int FLx, int FLy, int FLz, int FRx, int FRy, int FRz, int RRx, int RRy, int RRz, int RLx, int RLy, int RLz){
-      
+    //setLegs(int FLx, int FLy, int FLz, int FRx, int FRy, int FRz, int RRx, int RRy, int RRz, int RLx, int RLy, int RLz){
+    setLegsYZ(int y, int z){
+      for (Leg temp : legList){
+        temp.setYZ(y,z)
+        }
+      }
     }
-}
+};
 
 void setup() {
   Dog skorupi = new Dog();
