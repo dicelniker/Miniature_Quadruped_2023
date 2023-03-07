@@ -21,13 +21,13 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
       
       right = onRightQuestionMark;
 
-      Ovres *hipY = new Ovres();
+      Servo *hipY = new Servo();
       hipY.attach(hipYPin);
       
-      Ovres *hipX = new Ovres();
+      Servo *hipX = new Servo();
       hipX.attach(hipXPin);
       
-      Ovres *knee = new Ovres();
+      Servo *knee = new Servo();
       knee.attach(kneePin);
 
       boolean right = true;
@@ -38,7 +38,7 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
     }
 };
 
-Class Dog {
+class Dog {
   private:
     Leg FL;
     Leg FR;
@@ -46,6 +46,7 @@ Class Dog {
     Leg RL;
 
     //list<Leg>legList;
+    Leg[] legs;
     
   public:
     Dog() {
@@ -54,14 +55,20 @@ Class Dog {
       Leg *RR = new Leg(10,12,5,true);
       Leg *RL = new Leg(11,13,3,false);
 
+      Leg[] legs = new Leg[4];
+      legs[0] = FL;
+      legs[1] = FR;
+      legs[2] = RR;
+      legs[3] = RL;
       //legList.add(FL);
       //legList.add(FR);
       //legList.add(RR);
       //legList.add(RL);
+      
     }
-    //setLegs(int FLx, int FLy, int FLz, int FRx, int FRy, int FRz, int RRx, int RRy, int RRz, int RLx, int RLy, int RLz){
-    setLegsYZ(int y, int z){
-      for (Leg temp : legList){
+    //setLegs(int FLx, int FLy, int FLz, int FRx, int FRy, int FRz,] int RRx, int RRy, int RRz, int RLx, int RLy, int RLz){
+    setLegsYZ(int hipXAng, int kneeAng){
+      for (Leg temp : legs){
         temp.setYZ(y,z)
         }
       }
