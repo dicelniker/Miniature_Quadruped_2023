@@ -1,46 +1,24 @@
 /*
-
+Dogcode
 */
 
 #include <Servo.h>
 #include <math.h>
-#include <list>
+//#include <list>
 
-class Ovres : public Servo { //extends servo to add an angle variable
+
+class Leg { //includes the three servos of the leg as well as wether or not the leg is on the right or the left
   private:
-    int ang;
-    int pin;
-
-  public:
-    Ovres() {
-      ang = 0;
-      Servo();
-    }
-
-    void setAngle(int pos) {
-      ang = pos;
-      Servo.write(ang);
-    }
-};
-
-class Leg { //includes the three servos of the leg as well as the position of the foot, as well as wether or not the leg is on the right or the left
-  private:
-    double x;
-    double y;
-    double z;
-
-    Ovres hipY;
-    Ovres hipX;
-    Ovres knee;
+  
+    Servo hipY;
+    Servo hipX;
+    Servo knee;
 
     boolean right;
 
    public:
     Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark) {
-      x = 0.0;
-      y = 0.0;
-      z = 0.0;
-
+      
       right = onRightQuestionMark;
 
       Ovres *hipY = new Ovres();
@@ -67,7 +45,7 @@ Class Dog {
     Leg RR;
     Leg RL;
 
-    list<Leg>legList;
+    //list<Leg>legList;
     
   public:
     Dog() {
@@ -76,10 +54,10 @@ Class Dog {
       Leg *RR = new Leg(10,12,5,true);
       Leg *RL = new Leg(11,13,3,false);
 
-      legList.add(FL);
-      legList.add(FR);
-      legList.add(RR);
-      legList.add(RL);
+      //legList.add(FL);
+      //legList.add(FR);
+      //legList.add(RR);
+      //legList.add(RL);
     }
     //setLegs(int FLx, int FLy, int FLz, int FRx, int FRy, int FRz, int RRx, int RRy, int RRz, int RLx, int RLy, int RLz){
     setLegsYZ(int y, int z){

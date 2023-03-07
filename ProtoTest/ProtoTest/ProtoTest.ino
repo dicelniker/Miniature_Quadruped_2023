@@ -1,11 +1,3 @@
-/* Sweep
- by BARRAGAN <http://barraganstudio.com>
- This example code is in the public domain.
-
- modified 8 Nov 2013
- by Scott Fitzgerald
- https://www.arduino.cc/en/Tutorial/LibraryExamples/Sweep
-*/
 
 #include <Servo.h>
 
@@ -23,7 +15,7 @@ void setup() {
 
 void loop() {
   //test.write(0);
-    test.writeMicroseconds(specialSauce(75.0)); //550 is 0, 2400 is max is 160
+    test.writeMicroseconds(specialSauce(135.0)); //550 is 0, 2400 is max is 160
 //  delay(random(100)*1000);
   delay(1000);
   test.write(0); //45 is 50, 90 is 100, 160 is 180(max), 10 is 10, 20 is 20, 30 is 30, 
