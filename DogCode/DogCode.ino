@@ -24,7 +24,7 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
    
     void setYZ(double hipXAng, double kneeAng){
         hipX.writeMicroseconds(specialSauce(hipXAng));
-        knee.writeMicroseconds(specialSauce(kneeAng));
+        knee.writeMicroseconds(specialSauce(180+hipX.read()+ kneeAng));
     }
 
     void setHip(double ang){
@@ -100,9 +100,8 @@ Dog* skorupi = new Dog();
 
 void setup() {
   skorupi->setHips(80.0);
-  skorupi->setLegsYZ(0.0,0.0);
+  skorupi->setLegsYZ(340.8,220.2);
   delay(5000);
-  
 }
 
 void loop() {
