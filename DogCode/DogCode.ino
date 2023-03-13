@@ -66,7 +66,7 @@ class Dog {
                    Leg(9,7,4,false),
                    Leg(10,12,5,true),
                    Leg(11,13,3,false)
-    };    
+                                    };    
   public:
     Dog();
     
