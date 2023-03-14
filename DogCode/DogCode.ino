@@ -23,8 +23,15 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
     Leg();
    
     void setYZ(double hipXAng, double kneeAng){
+      hipXAng = 
+      if (right){
         hipX.writeMicroseconds(specialSauce(hipXAng));
-        knee.writeMicroseconds(specialSauce(180+hipX.read()+ kneeAng));
+        knee.writeMicroseconds(specialSauce(180 + hipXAng + kneeAng));
+      }
+      else { 
+        hipX.writeMicroseconds(specialSauce(hipXAng));
+        knee.writeMicroseconds(specialSauce(180 + hipXAng + kneeAng));
+      }
     }
 
     void setHip(double ang){
@@ -98,12 +105,27 @@ Dog::Dog() {
 
 Dog* skorupi = new Dog();
 
+int gaitOne[10][2] =        {{341, 220},
+                             {3,   261},
+                             {351, 292},
+                             {321, 303},
+                             {322, 271},
+                             {307, 241},
+                             {267, 224},
+                             {236, 218},
+                             {253, 198},
+                             {298, 194},
+                                       };
 void setup() {
+  
   skorupi->setHips(80.0);
   skorupi->setLegsYZ(340.8,220.2);
   delay(5000);
+ 
 }
 
 void loop() {
-  skorupi->setLegsYZ(0.0,0.0);
+  for (int i = 0; i<10; i++){
+    skorupi->setLegsYZ(gaitOne[i][0],gaitOne[i][1]);
+  }
 }
