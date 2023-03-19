@@ -77,45 +77,35 @@ Leg::Leg() {
 
 class Dog {
   private:
-    Leg FL;
-    Leg FR;
-    Leg RR;
-    Leg RL;
 
     //list<Leg>legList;
-    Leg legs[4] = {Leg(9, 7, 4, false),
-                   Leg(9, 7, 4, false),
-                   Leg(10, 12, 5, true),
-                   Leg(11, 13, 3, false)
-                  };
+    Leg legs[4];
+    
   public:
     Dog();
 
     //setLegs(int FLx, int FLy, int FLz, int FRx, int FRy, int FRz,] int RRx, int RRy, int RRz, int RLx, int RLy, int RLz){
-    void setLegsYZ(double hipXAng, double kneeAng) {
-      for (Leg temp : legs) {
-        temp.setYZ(hipXAng, kneeAng);
-      }
+  void setLegsYZ(double hipXAng, double kneeAng) {
+    for (Leg& leg : legs) {
+      leg.setYZ(hipXAng, kneeAng);
     }
+  }
 
     void setHips(double ang) {
-      for (Leg temp : legs) {
-        temp.setHip(ang); //not sure if this works with the for loop and setting a variable to smthn
+      for (Leg& leg : legs) {
+        leg.setHip(ang); //not sure if this works with the for loop and setting a variable to smthn
       }
     }
 };
 
-Dog::Dog() {
-  //Leg *fl = new Leg(9,7,4,false);
-  //Leg *fr = new Leg(8,6,2,true);
-  //Leg *rr = new Leg(10,12,5,true);
-  //Leg *rl = new Leg(11,13,3,false);
+Dog::Dog() :
+legs{Leg(1, 2, 3, false),
+     Leg(4, 5, 6, false),
+     Leg(7, 8, 9, true),
+     Leg(10, 11, 12, true)
+     }
+     {};
 
-  //legs[0] = fl;
-  //legs[1] = fr;
-  //legs[2] = rr;
-  //legs[3] = rl;
-}
 
 Dog* skorupi = new Dog();
 
@@ -139,8 +129,19 @@ void setup() {
 }
 
 void loop() {
-  for (int i = 0; i < 10; i++) {
+  int lngth = 10;
+  
+  for (int i = 0; i < lngth; i++) {
     skorupi->setLegsYZ(gaitOne[i][0], gaitOne[i][1]);
-    delay(500);
+    
+    //delay for the servo with the most movement
+    if (i != 0){
+      delay(1.67 * max(abs(gaitOne[i][0]-gaitOne[i-1][0]),
+                       abs(gaitOne[i][1]-gaitOne[i-1][1])));
+    }
+    else{
+      delay(1.67 * max(abs(gaitOne[lngth-1][0]-gaitOne[0][0]),
+                       abs(gaitOne[lngth-1][1]-gaitOne[0][1])));
+    }
   }
 }
