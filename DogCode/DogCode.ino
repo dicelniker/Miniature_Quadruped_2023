@@ -53,13 +53,13 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
     }
 
     void zero() {
-      hipY.writeMicroseconds(specialSauce(80));
-      hipX.writeMicroseconds(specialSauce(110));
-      knee.writeMicroseconds(specialSauce(10));
+      hipY.writeMicroseconds(specialSauce(hipYZero));
+      hipX.writeMicroseconds(specialSauce(hipXZero));
+      knee.writeMicroseconds(specialSauce(kneeZero));
      }
 
-    static double specialSauce(double angle) {
-      double result = (angle / 160.0) * (2400 - 550) + 550;
+    static int specialSauce(double angle) {
+      int result = (angle / 160.0) * (2400 - 550) + 550;
       return result;
     }
 };
@@ -135,15 +135,17 @@ int gaitOne[10][2] = {{199, 320},
 void setup() {
 
   skorupi->zeroAll();
-  /*
+  
   skorupi->setHips(80.0);
   skorupi->setLegsYZ(340.8, 220.2);
   delay(5000);
-*/
+
 }
 
 void loop() {
-  /*
+  skorupi->zeroAll();
+  delay(10000);
+  
   int lngth = 10;
   
   for (int i = 0; i < lngth; i++) {
@@ -159,5 +161,5 @@ void loop() {
                        abs(gaitOne[lngth-1][1]-gaitOne[0][1])));
     }
   }
-  */
+  
 }

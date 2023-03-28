@@ -8,7 +8,7 @@ int testPol = 1;
 
 
 void setup() {
-  test.attach(31);  // attaches the servo on pin 9 to the servo object
+  test.attach(4);  // attaches the servo on pin 9 to the servo object
   zeroPos = test.read();
   testSpeed = 600;
 }
