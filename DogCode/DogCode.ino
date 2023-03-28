@@ -52,6 +52,12 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
       hipY.writeMicroseconds(specialSauce(ang));
     }
 
+    void zero() {
+      hipY.writeMicroseconds(specialSauce(80));
+      hipX.writeMicroseconds(specialSauce(110));
+      knee.writeMicroseconds(specialSauce(10));
+     }
+
     static double specialSauce(double angle) {
       double result = (angle / 160.0) * (2400 - 550) + 550;
       return result;
@@ -96,6 +102,12 @@ class Dog {
         leg.setHip(ang); //not sure if this works with the for loop and setting a variable to smthn
       }
     }
+
+    void zeroAll() {
+      for (Leg& leg : legs) {
+        leg.zero(); //not sure if this works with the for loop and setting a variable to smthn
+      }
+    }
 };
 
 Dog::Dog() :
@@ -122,13 +134,16 @@ int gaitOne[10][2] = {{199, 320},
                                 };
 void setup() {
 
+  skorupi->zeroAll();
+  /*
   skorupi->setHips(80.0);
   skorupi->setLegsYZ(340.8, 220.2);
   delay(5000);
-
+*/
 }
 
 void loop() {
+  /*
   int lngth = 10;
   
   for (int i = 0; i < lngth; i++) {
@@ -144,4 +159,5 @@ void loop() {
                        abs(gaitOne[lngth-1][1]-gaitOne[0][1])));
     }
   }
+  */
 }
