@@ -94,18 +94,30 @@ class Dog {
   void setLegsYZ(double hipXAng, double kneeAng) {
     for (Leg& leg : legs) {
       leg.setYZ(hipXAng, kneeAng);
+      Serial.print("hipX to ");
+      Serial.println(hipXAng);
+      Serial.println();
+      
+      Serial.print("knee to ");
+      Serial.println(kneeAng);
+      Serial.println();
     }
   }
 
     void setHips(double ang) {
       for (Leg& leg : legs) {
         leg.setHip(ang); //not sure if this works with the for loop and setting a variable to smthn
+        Serial.print("hipY to ");
+        Serial.println(ang);
+        Serial.println();
       }
     }
 
     void zeroAll() {
       for (Leg& leg : legs) {
         leg.zero(); //not sure if this works with the for loop and setting a variable to smthn
+        Serial.println("zeroed all");
+        Serial.println();
       }
     }
 };
@@ -133,12 +145,14 @@ int gaitOne[10][2] = {{199, 320},
                       {177, 279},
                                 };
 void setup() {
+  Serial.begin(9600); // open the serial port at 9600 bps:
 
   skorupi->zeroAll();
   
   skorupi->setHips(80.0);
   skorupi->setLegsYZ(340.8, 220.2);
   delay(5000);
+  
 
 }
 
