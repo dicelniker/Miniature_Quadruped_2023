@@ -84,13 +84,12 @@ Leg::Leg() {
 class Dog {
   private:
 
-    //list<Leg>legList;
+
     Leg legs[4];
     
   public:
     Dog();
 
-    //setLegs(int FLx, int FLy, int FLz, int FRx, int FRy, int FRz,] int RRx, int RRy, int RRz, int RLx, int RLy, int RLz){
   void setLegsYZ(double hipXAng, double kneeAng) {
     for (Leg& leg : legs) {
       leg.setYZ(hipXAng, kneeAng);
@@ -121,7 +120,7 @@ class Dog {
       }
     }
 };
-
+int pinOffset = 24;
 Dog::Dog() :
 legs{Leg(1, 2, 3, false),
      Leg(4, 5, 6, false),
@@ -145,18 +144,21 @@ int gaitOne[10][2] = {{199, 320},
                       {177, 279},
                                 };
 void setup() {
-  Serial.begin(9600); // open the serial port at 9600 bps:
+  //Serial.begin(9600); // open the serial port at 9600 bps:
 
-  skorupi->zeroAll();
-  
+  //skorupi->zeroAll();
+
+  /*
   skorupi->setHips(80.0);
   skorupi->setLegsYZ(340.8, 220.2);
-  delay(5000);
+  */
+  //delay(5000);
   
 
 }
 
 void loop() {
+  /*
   skorupi->zeroAll();
   delay(10000);
   
@@ -175,5 +177,5 @@ void loop() {
                        abs(gaitOne[lngth-1][1]-gaitOne[0][1])));
     }
   }
-  
+  */
 }
