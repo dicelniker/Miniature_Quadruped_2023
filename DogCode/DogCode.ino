@@ -15,21 +15,24 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
     double hipYZero = 80.0; //Should be placed at IRL 0.0deg when zeroed
     double hipYIRLZero = 0.0;
 
-    Servo hipX; //IRL Range: (160,320)
+    //Servo hipX; //IRL Range: (160,320)
     double hipXZero = 110.0; //should be placed at IRL 270.0deg when zeroed
     double hipXIRLZero = 270.0;
 
-    Servo knee; //IRL Range: (260,60) (based on knee frame of reference)
+    //Servo knee; //IRL Range: (260,60) (based on knee frame of reference)
     double kneeZero = 10.0; //should be placed at IRL 270.0deg when zeroed
     double kneeIRLZero = 270.0;
 
     boolean right;
 
   public:
-    Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark);
+    //Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark);
 
-    Leg();
+    Leg(int hipYPin);
+    
+    //Leg();
 
+/*
     void setYZ(double hipXAng, double kneeAng) {
 
       kneeAng = kneeAng - (kneeIRLZero - kneeZero) + (270.0 - hipXAng); //convert to correct servo value
@@ -40,8 +43,8 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
         kneeAng = 160.0 - kneeAng;
       }
       
-      hipX.writeMicroseconds(specialSauce(hipXAng));
-      knee.writeMicroseconds(specialSauce(kneeAng));
+      //hipX.writeMicroseconds(specialSauce(hipXAng));
+      //knee.writeMicroseconds(specialSauce(kneeAng));
     }
 
     void setHip(double ang) {
@@ -54,42 +57,47 @@ class Leg { //includes the three servos of the leg as well as wether or not the 
 
     void zero() {
       hipY.writeMicroseconds(specialSauce(hipYZero));
-      hipX.writeMicroseconds(specialSauce(hipXZero));
-      knee.writeMicroseconds(specialSauce(kneeZero));
+      //hipX.writeMicroseconds(specialSauce(hipXZero));
+      //knee.writeMicroseconds(specialSauce(kneeZero));
      }
-
-    static int specialSauce(double angle) {
-      int result = (angle / 160.0) * (2400 - 550) + 550;
-      return result;
-    }
+*/
+    //static int specialSauce(double angle) {
+     // int result = (angle / 160.0) * (2400 - 550) + 550;
+     // return result;
+   // }
 };
 
-Leg::Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark) {
+//Leg::Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark) {
+  //Servo *hipY = new Servo();
+  //hipY->attach(hipYPin);
+
+  //Servo *hipX = new Servo();
+  //hipX->attach(hipXPin);
+
+  //Servo *knee = new Servo();
+  //knee->attach(kneePin);
+
+  //right = onRightQuestionMark;
+//}
+
+//Leg::Leg() {
+  //right = false;
+//}
+
+Leg::Leg(int hipYPin) {
   Servo *hipY = new Servo();
   hipY->attach(hipYPin);
-
-  Servo *hipX = new Servo();
-  hipX->attach(hipXPin);
-
-  Servo *knee = new Servo();
-  knee->attach(kneePin);
-
-  right = onRightQuestionMark;
-}
-
-Leg::Leg() {
   right = false;
 }
 
 class Dog {
   private:
 
-
-    Leg legs[4];
+    Leg legs[1];
     
   public:
     Dog();
-
+/*
   void setLegsYZ(double hipXAng, double kneeAng) {
     for (Leg& leg : legs) {
       leg.setYZ(hipXAng, kneeAng);
@@ -102,7 +110,7 @@ class Dog {
       Serial.println();
     }
   }
-
+/*
     void setHips(double ang) {
       for (Leg& leg : legs) {
         leg.setHip(ang); //not sure if this works with the for loop and setting a variable to smthn
@@ -119,13 +127,17 @@ class Dog {
         Serial.println();
       }
     }
+*/
 };
+
 int pinOffset = 24;
 Dog::Dog() :
-legs{Leg(1, 2, 3, false),
-     Leg(4, 5, 6, false),
-     Leg(7, 8, 9, true),
-     Leg(10, 11, 12, true)
+legs{
+     Leg(3)
+     //Leg(1, 2, 3, false),
+     //Leg(4, 5, 6, false),
+     //Leg(7, 8, 9, true),
+     //Leg(10, 11, 12, true)
      }
      {};
 
