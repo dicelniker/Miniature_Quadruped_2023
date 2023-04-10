@@ -5,7 +5,7 @@ Servo test;  // create servo object to control a servo
 
 void setup() {
   Serial.begin(9600); // open the serial port at 9600 bps:
-  test.attach(4);  // attaches the servo on pin 9 to the servo object
+  test.attach(7);  // attaches the servo on pin 9 to the servo object
   
 }
 
