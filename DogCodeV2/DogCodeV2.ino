@@ -7,8 +7,8 @@
 //#include <list>
 
 
-class Leg { //includes the three servos of the leg 
-            //as well as wether or not the leg is on the right or the left
+class Leg { //includes the three servos of the leg
+    //as well as wether or not the leg is on the right or the left
 
   private:
 
@@ -30,7 +30,7 @@ class Leg { //includes the three servos of the leg
     Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark);
 
     Leg(int hipYPin);
-    
+
     Leg();
 
 
@@ -43,16 +43,16 @@ class Leg { //includes the three servos of the leg
         hipXAng = 160.0 - hipXAng;
         kneeAng = 160.0 - kneeAng;
       }
-      
+
       hipX.writeMicroseconds(specialSauce(hipXAng));
       knee.writeMicroseconds(specialSauce(kneeAng));
     }
 
     void setHip(double ang) {
-      if(!right) {
+      if (!right) {
         ang = 160.0 - ang;
       }
-      
+
       hipY.writeMicroseconds(specialSauce(ang));
     }
 
@@ -60,7 +60,7 @@ class Leg { //includes the three servos of the leg
       hipY.writeMicroseconds(specialSauce(hipYZero));
       hipX.writeMicroseconds(specialSauce(hipXZero));
       knee.writeMicroseconds(specialSauce(kneeZero));
-     }
+    }
 
     static int specialSauce(double angle) {
       int result = (angle / 160.0) * (2400 - 550) + 550;
@@ -92,22 +92,22 @@ class Dog {
   private:
 
     Leg legs[4];
-    
+
   public:
     Dog();
 
-  void setLegsYZ(double hipXAng, double kneeAng) {
-    for (Leg& leg : legs) {
-      leg.setYZ(hipXAng, kneeAng);
-      Serial.print("hipX to ");
-      Serial.println(hipXAng);
-      Serial.println();
-      
-      Serial.print("knee to ");
-      Serial.println(kneeAng);
-      Serial.println();
+    void setLegsYZ(double hipXAng, double kneeAng) {
+      for (Leg& leg : legs) {
+        leg.setYZ(hipXAng, kneeAng);
+        Serial.print("hipX to ");
+        Serial.println(hipXAng);
+        Serial.println();
+
+        Serial.print("knee to ");
+        Serial.println(kneeAng);
+        Serial.println();
+      }
     }
-  }
 
     void setHips(double ang) {
       for (Leg& leg : legs) {
@@ -130,61 +130,50 @@ class Dog {
 
 int pinOffset = 24;
 Dog::Dog() :
-legs{
-     Leg(1, 2, 3, false),
-     Leg(4, 5, 6, false),
-     Leg(7, 8, 9, true),
-     Leg(10, 11, 12, true)
-     }
-     {};
+  legs{
+  Leg(2, 3, 4, false),
+  Leg(5, 6, 7, false),
+  Leg(8, 9, 10, true),
+  Leg(11, 12, 13, true)
+}
+{};
 
-//Dog *skorupi = new Dog();
+Dog skorupi;
 
 
 int gaitOne[10][2] = {{199, 320},
-                      {242, 346},
-                      {287, 342},
-                      {304, 322},
-                      {273, 316},
-                      {233, 299},
-                      {218, 269},
-                      {219, 237},
-                      {189, 248},
-                      {177, 279},
-                                };
-
-Servo test;
-
-Leg testLeg; 
+  {242, 346},
+  {287, 342},
+  {304, 322},
+  {273, 316},
+  {233, 299},
+  {218, 269},
+  {219, 237},
+  {189, 248},
+  {177, 279},
+};
 
 void setup() {
-  testLeg = Leg(1,2,3,false);
+  skorupi = Dog();
   Serial.begin(9600); // open the serial port at 9600 bps:
-  test.attach(7); 
-  
+
   //the problem could be that you are supposed to attatch the servos in the setup and not in the base code
   //ok its prolly cuz we're doing -> and * instead of Servo test; and test.akshjf();
   //could be either of these actually
-// so i got it to just set to default and not do random things at least that's good
+  // so i got it to just set to default and not do random things at least that's good
 
-  test.write(0);
-  test.write(160);
-  testLeg.setHip(0);
-  testLeg.setYZ(160, 160);
-  
-  
+  skorupi.zeroAll();
+
 }
 
 void loop() {
-  test.write(0);
-  testLeg.setHip(0);
-  testLeg.setYZ(0, 0);
-  
+  skorupi.setHips(0);
+  skorupi.setLegsYZ(160, 260);
+
   delay(1000);
-  
-  test.write(160);
-  testLeg.setHip(160);
-  testLeg.setYZ(160, 160);
-  
+
+  skorupi.setHips(160);
+  skorupi.setLegsYZ(320, 60);
+
   delay(1000);
 }
