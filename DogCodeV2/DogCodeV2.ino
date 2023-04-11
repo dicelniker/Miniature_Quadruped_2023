@@ -75,6 +75,10 @@ Leg::Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark) {
 
   knee.attach(kneePin);
 
+  hipY.writeMicroseconds(specialSauce(hipYZero));
+  hipX.writeMicroseconds(specialSauce(hipXZero));
+  knee.writeMicroseconds(specialSauce(kneeZero));
+
   right = onRightQuestionMark;
 }
 
@@ -91,7 +95,7 @@ Leg::Leg(int hipYPin) {
 class Dog {
   private:
 
-    Leg legs[4];
+    //Leg legs[4];
 
     Leg Fl;
     Leg Rl;
@@ -102,7 +106,8 @@ class Dog {
     Dog();
 
     void setLegsYZ(double hipXAng, double kneeAng) {
-      for (Leg& leg : legs) {
+      /*
+        for (Leg& leg : legs) {
         leg.setYZ(hipXAng, kneeAng);
         Serial.print("hipX to ");
         Serial.println(hipXAng);
@@ -111,24 +116,41 @@ class Dog {
         Serial.print("knee to ");
         Serial.println(kneeAng);
         Serial.println();
-      }
+        }
+      */
+      Fl.setYZ(hipXAng, kneeAng);
+      Rl.setYZ(hipXAng, kneeAng);
+      Rr.setYZ(hipXAng, kneeAng);
+      Fr.setYZ(hipXAng, kneeAng);
     }
 
     void setHips(double ang) {
-      for (Leg& leg : legs) {
+      /*
+        for (Leg& leg : legs) {
         leg.setHip(ang); //not sure if this works with the for loop and setting a variable to smthn
         Serial.print("hipY to ");
         Serial.println(ang);
         Serial.println();
-      }
+        }
+      */
+      Fl.setHip(ang);
+      Rl.setHip(ang);
+      Rr.setHip(ang);
+      Fr.setHip(ang);
     }
 
     void zeroAll() {
-      for (Leg& leg : legs) {
+      /*
+        for (Leg& leg : legs) {
         leg.zero(); //not sure if this works with the for loop and setting a variable to smthn
         Serial.println("zeroed all");
         Serial.println();
-      }
+        }
+      */
+      Fl.zero();
+      Rl.zero();
+      Rr.zero();
+      Fr.zero();
     }
 
 };
@@ -137,14 +159,18 @@ int pinOffset = 24;
 
 Dog::Dog() {
   Fl = Leg(2, 3, 4, false);
+  Fl.zero();
   Rl = Leg(5, 6, 7, false);
+  Rl.zero();
   Rr = Leg(8, 9, 10, true);
+  Rr.zero();
   Fr = Leg(11, 12, 13, true);
-  
-  legs[0] = Fl;
-  legs[1] = Rl;
-  legs[2] = Rr;
-  legs[3] = Fr;
+  Fr.zero();
+
+  //legs[0] = Fl;
+  //legs[1] = Rl;
+  //legs[2] = Rr;
+  //legs[3] = Fr;
 }
 
 
@@ -160,29 +186,53 @@ int gaitOne[10][2] = {{199, 320},
   {177, 279},
 };
 
+Servo test;
+Leg testLeg;
 Dog skorupi;
 
+
 void setup() {
-  skorupi = Dog();
+  testLeg = Leg(22, 24, 26, false);
   Serial.begin(9600); // open the serial port at 9600 bps:
+  test.attach(28);
+  /*
+    skorupi = Dog();
+    Serial.begin(9600); // open the serial port at 9600 bps:
 
-  //the problem could be that you are supposed to attatch the servos in the setup and not in the base code
-  //ok its prolly cuz we're doing -> and * instead of Servo test; and test.akshjf();
-  //could be either of these actually
-  // so i got it to just set to default and not do random things at least that's good
+    //the problem could be that you are supposed to attatch the servos in the setup and not in the base code
+    //ok its prolly cuz we're doing -> and * instead of Servo test; and test.akshjf();
+    //could be either of these actually
+    // so i got it to just set to default and not do random things at least that's good
 
-  skorupi.zeroAll();
+    skorupi.zeroAll();
+  */
 
+  test.write(160);
+  testLeg.setHip(0);
+  testLeg.setYZ(160, 260);
 }
 
 void loop() {
-  skorupi.setHips(0);
-  skorupi.setLegsYZ(160, 260);
+  test.write(0);
+  testLeg.setHip(0);
+  testLeg.setYZ(160, 260);
 
   delay(1000);
 
-  skorupi.setHips(160);
-  skorupi.setLegsYZ(320, 60);
+  test.write(160);
+  testLeg.setHip(160);
+  testLeg.setYZ(320, 60);
 
   delay(1000);
+  /*
+    skorupi.setHips(0);
+    skorupi.setLegsYZ(160, 260);
+
+    delay(1000);
+
+    skorupi.setHips(160);
+    skorupi.setLegsYZ(320, 60);
+
+    delay(1000);
+  */
 }
