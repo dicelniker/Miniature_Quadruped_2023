@@ -93,6 +93,11 @@ class Dog {
 
     Leg legs[4];
 
+    Leg Fl;
+    Leg Rl;
+    Leg Rr;
+    Leg Fr;
+
   public:
     Dog();
 
@@ -129,16 +134,18 @@ class Dog {
 };
 
 int pinOffset = 24;
-Dog::Dog() :
-  legs{
-  Leg(2, 3, 4, false),
-  Leg(5, 6, 7, false),
-  Leg(8, 9, 10, true),
-  Leg(11, 12, 13, true)
-}
-{};
 
-Dog skorupi;
+Dog::Dog() {
+  Fl = Leg(2, 3, 4, false);
+  Rl = Leg(5, 6, 7, false);
+  Rr = Leg(8, 9, 10, true);
+  Fr = Leg(11, 12, 13, true);
+  
+  legs[0] = Fl;
+  legs[1] = Rl;
+  legs[2] = Rr;
+  legs[3] = Fr;
+}
 
 
 int gaitOne[10][2] = {{199, 320},
@@ -152,6 +159,8 @@ int gaitOne[10][2] = {{199, 320},
   {189, 248},
   {177, 279},
 };
+
+Dog skorupi;
 
 void setup() {
   skorupi = Dog();
