@@ -232,22 +232,18 @@ void loop() {
   testLeg.setHip(0);
   testLeg.setYZ(160, 260);
 
+  skorupi.setHips(0);
+  skorupi.setLegsYZ(160, 260);
+
   delay(1000);
 
   test.write(160);
   testLeg.setHip(160);
   testLeg.setYZ(320, 60);
 
-  delay(1000);
-  /*
-    skorupi.setHips(0);
-    skorupi.setLegsYZ(160, 260);
+  skorupi.setHips(160);
+  skorupi.setLegsYZ(320, 60);
 
     delay(1000);
 
-    skorupi.setHips(160);
-    skorupi.setLegsYZ(320, 60);
-
-    delay(1000);
-  */
 }
