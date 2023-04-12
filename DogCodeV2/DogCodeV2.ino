@@ -212,7 +212,6 @@ void setup() {
   
   Leg frontRight;
   frontRight = Leg(11, 12, 13, true);
-
   
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
 
