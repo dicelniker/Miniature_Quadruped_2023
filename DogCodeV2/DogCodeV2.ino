@@ -97,13 +97,15 @@ class Dog {
 
     //Leg legs[4];
 
-    Leg Fl;
-    Leg Rl;
-    Leg Rr;
-    Leg Fr;
+    Leg fl;
+    Leg rl;
+    Leg rr;
+    Leg fr;
 
   public:
     Dog();
+  
+    Dog(Leg frontLeft, Leg rearLeft, Leg rearRight, Leg frontRight);
 
     void setLegsYZ(double hipXAng, double kneeAng) {
       /*
@@ -118,10 +120,10 @@ class Dog {
         Serial.println();
         }
       */
-      Fl.setYZ(hipXAng, kneeAng);
-      Rl.setYZ(hipXAng, kneeAng);
-      Rr.setYZ(hipXAng, kneeAng);
-      Fr.setYZ(hipXAng, kneeAng);
+      fl.setYZ(hipXAng, kneeAng);
+      rl.setYZ(hipXAng, kneeAng);
+      rr.setYZ(hipXAng, kneeAng);
+      fr.setYZ(hipXAng, kneeAng);
     }
 
     void setHips(double ang) {
@@ -133,10 +135,10 @@ class Dog {
         Serial.println();
         }
       */
-      Fl.setHip(ang);
-      Rl.setHip(ang);
-      Rr.setHip(ang);
-      Fr.setHip(ang);
+      fl.setHip(ang);
+      rl.setHip(ang);
+      rr.setHip(ang);
+      fr.setHip(ang);
     }
 
     void zeroAll() {
@@ -147,10 +149,10 @@ class Dog {
         Serial.println();
         }
       */
-      Fl.zero();
-      Rl.zero();
-      Rr.zero();
-      Fr.zero();
+      fl.zero();
+      rl.zero();
+      rr.zero();
+      fr.zero();
     }
 
 };
@@ -158,14 +160,18 @@ class Dog {
 int pinOffset = 24;
 
 Dog::Dog() {
-  Fl = Leg(2, 3, 4, false);
-  Fl.zero();
-  Rl = Leg(5, 6, 7, false);
-  Rl.zero();
-  Rr = Leg(8, 9, 10, true);
-  Rr.zero();
-  Fr = Leg(11, 12, 13, true);
-  Fr.zero();
+  
+}
+
+Dog::Dog(Leg frontLeft, Leg rearLeft, Leg rearRight, Leg frontRight) {
+  fl = frontLeft;
+  fl.zero();
+  rl = rearLeft;
+  rl.zero();
+  rr = rearRight;
+  rr.zero();
+  fr = frontRight;
+  fr.zero();
 
   //legs[0] = Fl;
   //legs[1] = Rl;
@@ -193,11 +199,22 @@ Dog skorupi;
 
 void setup() {
   testLeg = Leg(22, 24, 26, false);
-  Serial.begin(9600); // open the serial port at 9600 bps:
   test.attach(28);
-  /*
-    skorupi = Dog();
-    Serial.begin(9600); // open the serial port at 9600 bps:
+
+  Leg frontLeft;
+  frontLeft = Leg(2, 3, 4, false);
+ 
+  Leg rearLeft;
+  rearLeft = Leg(5, 6, 7, false);
+ 
+  Leg rearRight;
+  rearRight = Leg(8, 9, 10, true);
+  
+  Leg frontRight;
+  frontRight = Leg(11, 12, 13, true);
+
+  
+  skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
 
     //the problem could be that you are supposed to attatch the servos in the setup and not in the base code
     //ok its prolly cuz we're doing -> and * instead of Servo test; and test.akshjf();
@@ -205,7 +222,6 @@ void setup() {
     // so i got it to just set to default and not do random things at least that's good
 
     skorupi.zeroAll();
-  */
 
   test.write(160);
   testLeg.setHip(0);
