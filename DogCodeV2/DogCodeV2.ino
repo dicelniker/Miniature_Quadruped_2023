@@ -66,6 +66,11 @@ class Leg { //includes the three servos of the leg
       int result = (angle / 160.0) * (2400 - 550) + 550;
       return result;
     }
+
+    void set(double hipYAng, double hipXAng, double kneeAng){
+      setHip(hipYAng);
+      setYZ(hipXAng, kneeAng);
+    }
 };
 
 Leg::Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark) {
@@ -124,6 +129,12 @@ class Dog {
       rl.setYZ(hipXAng, kneeAng);
       rr.setYZ(hipXAng, kneeAng);
       fr.setYZ(hipXAng, kneeAng);
+
+      Serial.print("YZ set to: ");
+      Serial.print(hipXAng);    
+      Serial.print(", ");
+      Serial.println(kneeAng);
+      Serial.println();
     }
 
     void setHips(double ang) {
@@ -139,6 +150,10 @@ class Dog {
       rl.setHip(ang);
       rr.setHip(ang);
       fr.setHip(ang);
+
+      Serial.print("Hips set to: ");
+      Serial.println(ang);
+      Serial.println();
     }
 
     void zeroAll() {
@@ -153,8 +168,41 @@ class Dog {
       rl.zero();
       rr.zero();
       fr.zero();
-    }
 
+      Serial.println("Zeroed");    
+      Serial.println();
+    }
+    //String to_String(){
+      //Serial.println("This is a dog fam");      
+    //}
+
+    void setLegs(double hipYAng, double hipXAng, double kneeAng) {
+      /*
+        for (Leg& leg : legs) {
+        leg.setYZ(hipXAng, kneeAng);
+        Serial.print("hipX to ");
+        Serial.println(hipXAng);
+        Serial.println();
+
+        Serial.print("knee to ");
+        Serial.println(kneeAng);
+        Serial.println();
+        }
+      */
+      fl.set(hipYAng, hipXAng, kneeAng);
+      rl.set(hipYAng, hipXAng, kneeAng);
+      rr.set(hipYAng, hipXAng, kneeAng);
+      fr.set(hipYAng, hipXAng, kneeAng);
+
+      Serial.print("leg set to: ");
+      Serial.print(hipYAng);    
+      Serial.print(", ");
+      Serial.print(hipXAng);
+      Serial.print(", ");
+      Serial.println(kneeAng);
+      Serial.println();
+    }
+    
 };
 
 int pinOffset = 24;
@@ -198,6 +246,9 @@ Dog skorupi;
 
 
 void setup() {
+  Serial.begin(9600);
+  Serial.println("adslkfj");
+  
   testLeg = Leg(22, 24, 26, false);
   test.attach(28);
 
@@ -220,7 +271,7 @@ void setup() {
     //could be either of these actually
     // so i got it to just set to default and not do random things at least that's good
 
-    skorupi.zeroAll();
+  skorupi.zeroAll();
 
   test.write(160);
   testLeg.setHip(0);
@@ -228,6 +279,8 @@ void setup() {
 }
 
 void loop() {
+/*
+  
   test.write(0);
   testLeg.setHip(0);
   testLeg.setYZ(160, 260);
@@ -244,6 +297,24 @@ void loop() {
   skorupi.setHips(160);
   skorupi.setLegsYZ(320, 60);
 
-    delay(1000);
+   delay(1000);
 
+*/
+
+  int lngth = 10;
+  
+  for (int i = 0; i < lngth; i++) {
+    
+    skorupi.setLegs(0, gaitOne[i][0], gaitOne[i][1]);
+    
+    //delay for the servo with the most movement
+    if (i != 0){
+      delay(10.67 * max(abs(gaitOne[i][0]-gaitOne[i-1][0]),
+                       abs(gaitOne[i][1]-gaitOne[i-1][1])));
+    }
+    else{
+      delay(10.67 * max(abs(gaitOne[lngth-1][0]-gaitOne[0][0]),
+                       abs(gaitOne[lngth-1][1]-gaitOne[0][1])));
+    }
+  }
 }
