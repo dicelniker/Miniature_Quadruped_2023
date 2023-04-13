@@ -272,9 +272,10 @@ void setup() {
     // so i got it to just set to default and not do random things at least that's good
 
   skorupi.zeroAll();
-
+  delay(1000);
+  
   test.write(160);
-  testLeg.setHip(0);
+  testLeg.setHip(80);
   testLeg.setYZ(160, 260);
 }
 
@@ -299,13 +300,13 @@ void loop() {
 
    delay(1000);
 
-*/
+  */
 
   int lngth = 10;
   
   for (int i = 0; i < lngth; i++) {
     
-    skorupi.setLegs(0, gaitOne[i][0], gaitOne[i][1]);
+    skorupi.setLegs(80, gaitOne[i][0], gaitOne[i][1]);
     
     //delay for the servo with the most movement
     if (i != 0){
@@ -315,6 +316,9 @@ void loop() {
     else{
       delay(10.67 * max(abs(gaitOne[lngth-1][0]-gaitOne[0][0]),
                        abs(gaitOne[lngth-1][1]-gaitOne[0][1])));
-    }
+     }
   }
+
+ // skorupi.zeroAll();
+
 }
