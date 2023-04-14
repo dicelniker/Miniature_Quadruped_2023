@@ -39,8 +39,13 @@ class Leg { //includes the three servos of the leg
 
     void setYZ(double hipXAng, double kneeAng, double spd) {
 
-      double prevHipXAng = hipXAngle + (hipXIRLZero - hipXZero);;
+      double prevHipXAng = hipXAngle + (hipXIRLZero - hipXZero);
       double prevKneeAng = (360 - kneeAngle) - (kneeIRLZero - kneeZero) - (270.0 - hipXAngle);
+
+       if (!right) { //account for leg polarity
+        prevHipXAng = 160.0 - prevHipXAng;
+        prevKneeAng = 160.0 - prevKneeAng;
+      }
       
       double prevY = 2.165*cos(prevHipXAng*3.14/180)+2.675*cos(prevKneeAng*3.14/180);
       double prevZ = 2.165*sin(prevHipXAng*3.14/180)+2.675*sin(prevKneeAng*3.14/180); 
@@ -54,7 +59,7 @@ class Leg { //includes the three servos of the leg
       Serial.println(" inches");
 //1.6, 1.6, .56, 1.4, 2.0, 1.8, 1.5, .79, 1.6, 1.8
 
-      double t = (double) round(10*(distance/spd))/10;
+      double t = (double) round(100*(distance/spd))/100;
       Serial.print("time: ");
       Serial.print(t);
       Serial.println(" seconds");
@@ -67,11 +72,11 @@ class Leg { //includes the three servos of the leg
         kneeAng = 160.0 - kneeAng;
       }
 
-      int steps = t/0.1;
+      int steps = t/0.01;
       double hipXStep = (hipXAng - hipXAngle)/steps;
       double kneeStep = (kneeAng - kneeAngle)/steps;
 
-      if ((hipXStep > 60) || (kneeStep > 60)){
+      if ((hipXStep > 6) || (kneeStep > 6)){
         Serial.println("woah there buckaroo");
         delay(10000);
       }
@@ -82,8 +87,9 @@ class Leg { //includes the three servos of the leg
          hipX.writeMicroseconds(specialSauce(hipXAngle));
          knee.writeMicroseconds(specialSauce(kneeAngle));
          
+         //Serial.println("delay 10");
+         delay(10);
          
-         delay (0.1);
       }
       hipX.writeMicroseconds(specialSauce(hipXAng));
       knee.writeMicroseconds(specialSauce(kneeAng));
@@ -297,9 +303,8 @@ double footSpeed;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("adslkfj");
 
-  footSpeed = 3.0; //footspeed in inches/s - may be limited by servo max speed
+  footSpeed = 4.0; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
   frontLeft = Leg(2, 3, 4, false);
@@ -321,17 +326,19 @@ void setup() {
     // so i got it to just set to default and not do random things at least that's good
 
   skorupi.zeroAll();
-  delay(1000);
+  delay(5000);
 }
 
 void loop() {
+
+  //skorupi.zeroAll();
 
   int lngth = 10;
   
   for (int i = 0; i < lngth; i++) {
     
     skorupi.setLegs(80, gaitOne[i][0], gaitOne[i][1], footSpeed);
-    
+ /*   
     //delay for the servo with the most movement
     if (i != 0){
       delay(10.67 * max(abs(gaitOne[i][0]-gaitOne[i-1][0]),
@@ -341,8 +348,8 @@ void loop() {
       delay(10.67 * max(abs(gaitOne[lngth-1][0]-gaitOne[0][0]),
                        abs(gaitOne[lngth-1][1]-gaitOne[0][1])));
      }
-  }
+   */
+}
 
- // skorupi.zeroAll();
 
 }
