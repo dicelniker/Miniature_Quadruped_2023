@@ -49,9 +49,9 @@ class Leg { //includes the three servos of the leg
       hipXAngle = hipXAng;
       kneeAngle = kneeAng;
       Serial.println();
-      Serial.print("HipX set to IRL: ");
+      Serial.print("HipX to IRL: ");
       Serial.println(hipXAng);
-      Serial.print("Knee set to IRL: ");
+      Serial.print("Knee to IRL: ");
       Serial.println(kneeAng);
       
       kneeAng = (360 - kneeAng) - (kneeIRLZero - kneeZero) - (270.0 - hipXAng); //convert to correct servo value
@@ -64,13 +64,13 @@ class Leg { //includes the three servos of the leg
       
       hipX.writeMicroseconds(specialSauce(hipXAng));
       knee.writeMicroseconds(specialSauce(kneeAng));
-
+      /*
       Serial.println();
-      Serial.print("HipX set to: ");
+      Serial.print("HipX to: ");
       Serial.println(hipXAng);
-      Serial.print("Knee set to: ");
+      Serial.print("Knee to: ");
       Serial.println(kneeAng);
-      
+      */
     }
 
     void setHip(double ang) {
@@ -103,75 +103,78 @@ class Leg { //includes the three servos of the leg
       for (int i = 0; i < 10; i++) {
           path[i][0] = pth[i][0];
           path[i][1] = pth[i][1];
-          Serial.print(path[i][0]);
-          Serial.print(", ");
-          Serial.println(path[i][1]);
-          Serial.println();
+          //Serial.print(path[i][0]);
+          //Serial.print(", ");
+          //Serial.println(path[i][1]);
+          //Serial.println();
       }
       footSpeed = spd;
     }
     
     void updateAngs(){
-       Serial.print("pathIndex: ");
-       Serial.println(pathIndex);
-       Serial.println();
       if (steps == currStep) {
        if (pathIndex != 9){
          pathIndex++;
        }
        else{pathIndex = 0;}
+       /*
        Serial.print("pathIndex: ");
        Serial.println(pathIndex);
        Serial.println();
        Serial.println(path[pathIndex][0]);
        Serial.println(path[pathIndex][1]);
        Serial.println();
+       */
        double distance = dist(hipXAngle, kneeAngle, path[pathIndex][0], path[pathIndex][1]);
+       /*
        Serial.println();
        Serial.println(path[pathIndex][0]);
        Serial.println(path[pathIndex][1]);
        Serial.println();
+      */
        double t = (double) round(100*(distance/footSpeed))/100; 
+      /*
        Serial.print("time: ");
        Serial.print(t);
        Serial.println(" seconds");
-      
+      */
        steps = t/0.01;
-       Serial.print("steps: ");
-       Serial.println(steps);
-          
+       //Serial.print("steps: ");
+       //Serial.println(steps);   
        hipXStep = (path[pathIndex][0] - hipXAngle)/steps;
+       /*
        Serial.print("hipXStep: ");
        Serial.print(hipXStep);
        Serial.println(" deg");
-       
+       */
        kneeStep = (path[pathIndex][1] - kneeAngle)/steps;
-
+       /*
        Serial.print("kneeStep: ");
        Serial.print(kneeStep);
        Serial.println(" deg");
-
+       */
        if ((abs(hipXStep) > 6) || (abs(kneeStep) > 6)){
         Serial.println("woah there buckaroo");
         delay(100000);
        }
   
        currStep = 0;
-       Serial.print("currStep: ");
-       Serial.println(0);
+       //Serial.print("currStep: ");
+       //Serial.println(0);
       }
       
       setYZ(hipXAngle + hipXStep, kneeAngle + kneeStep);
       
       currStep++;
-      Serial.print("currStep: ");
-      Serial.println(currStep);
+      //Serial.print("currStep: ");
+      //Serial.println(currStep);
         
     }
 
     // finds the distance in the YZ plane between 2 foot positions based on the IRLangles of the
     //hipX and knee servos before and after the movement
     double dist(double prevHipX, double prevKnee, double newHipX, double newKnee){
+     /*
       Serial.print("finding distance from current angles: (");
       Serial.print(prevHipX);
       Serial.print(", ");
@@ -181,7 +184,7 @@ class Leg { //includes the three servos of the leg
       Serial.print(", ");
       Serial.print(newKnee);          
       Serial.println(")");
-      
+      */
       double prevY = 2.165*cos(prevHipX*3.14/180)+2.675*cos(prevKnee*3.14/180);
       double prevZ = 2.165*sin(prevHipX*3.14/180)+2.675*sin(prevKnee*3.14/180); 
 
@@ -189,6 +192,7 @@ class Leg { //includes the three servos of the leg
       double currZ = 2.165*sin(newHipX*3.14/180)+2.675*sin(newKnee*3.14/180);
 
       double distance = sqrt(sq(currY - prevY) + sq(currZ - prevZ));
+      /*
       Serial.print("distance from current point: (");
       Serial.print(prevY);
       Serial.print(", ");
@@ -200,6 +204,8 @@ class Leg { //includes the three servos of the leg
       Serial.print(") is ");
       Serial.print(distance);
       Serial.println(" inches");
+      */
+      
       //1.6, 1.6, .56, 1.4, 2.0, 1.8, 1.5, .79, 1.6, 1.8
      
       return distance;
@@ -414,17 +420,15 @@ Dog::Dog() {
 Dog::Dog(Leg frontLeft, Leg rearLeft, Leg rearRight, Leg frontRight) {
   fl = frontLeft;
   fl.zero();
+  
   rl = rearLeft;
   rl.zero();
+  
   rr = rearRight;
   rr.zero();
+  
   fr = frontRight;
   fr.zero();
-
-  //legs[0] = Fl;
-  //legs[1] = Rl;
-  //legs[2] = Rr;
-  //legs[3] = Fr;
 }
 
 
@@ -444,7 +448,7 @@ double footSpeed;
 
 void setup() {
   //comment this out because it slows down the dog a lot
-  //Serial.begin(19200);
+  Serial.begin(19200);
 
   footSpeed = 10; //footspeed in inches/s - may be limited by servo max speed
 
@@ -462,10 +466,6 @@ void setup() {
   
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
 
-    //the problem could be that you are supposed to attatch the servos in the setup and not in the base code
-    //ok its prolly cuz we're doing -> and * instead of Servo test; and test.akshjf();
-    //could be either of these actually
-    // so i got it to just set to default and not do random things at least that's good
 
   skorupi.zeroAll();
   delay(1000);
