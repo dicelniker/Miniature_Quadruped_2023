@@ -36,7 +36,7 @@ class Leg { //includes the three servos of the leg
     double footSpeed;
     double hipXStep;
     double kneeStep;
-    
+
   public:
     Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark);
 
@@ -53,7 +53,7 @@ class Leg { //includes the three servos of the leg
       Serial.println(hipXAng);
       Serial.print("Knee to IRL: ");
       Serial.println(kneeAng);
-      
+
       kneeAng = (360 - kneeAng) - (kneeIRLZero - kneeZero) - (270.0 - hipXAng); //convert to correct servo value
       hipXAng = hipXAng - (hipXIRLZero - hipXZero); //convert to correct servo value
 
@@ -61,25 +61,38 @@ class Leg { //includes the three servos of the leg
         hipXAng = 160.0 - hipXAng;
         kneeAng = 160.0 - kneeAng;
       }
-      
+
       hipX.writeMicroseconds(specialSauce(hipXAng));
       knee.writeMicroseconds(specialSauce(kneeAng));
       /*
-      Serial.println();
-      Serial.print("HipX to: ");
-      Serial.println(hipXAng);
-      Serial.print("Knee to: ");
-      Serial.println(kneeAng);
+        Serial.println();
+        Serial.print("HipX to: ");
+        Serial.println(hipXAng);
+        Serial.print("Knee to: ");
+        Serial.println(kneeAng);
       */
     }
 
     void setHip(double ang) {
-      if (!right) {
-        ang = 160.0 - ang;
-      }
 
-      hipY.writeMicroseconds(specialSauce(ang+hipYZero));
-      hipYAngle = ang;
+      //checks if value is too high or too low and could cause internal collisions
+      if (((ang > 28) && (ang < 332)) || (ang > 360) || (ang < 0)) {
+        Serial.println("woah there bucko that's too much... or too little");
+        delay(100000);
+      }
+      
+      else{
+        hipYAngle = ang;
+        
+        ang = ang + hipYZero;
+
+        if (!right) {
+          ang = 160.0 - ang;
+       }
+      
+       hipY.writeMicroseconds(specialSauce(ang));
+      }
+      
     }
 
     void zero() {
@@ -93,121 +106,123 @@ class Leg { //includes the three servos of the leg
       return result;
     }
 
-    void set(double hipYAng, double hipXAng, double kneeAng){
+    void set(double hipYAng, double hipXAng, double kneeAng) {
       setHip(hipYAng);
       setYZ(hipXAng, kneeAng);
     }
 
-    void setPath(int pth[10][2], double spd){
+    void setPath(int pth[10][2], double spd) {
       Serial.println("Path set to:");
       for (int i = 0; i < 10; i++) {
-          path[i][0] = pth[i][0];
-          path[i][1] = pth[i][1];
-          //Serial.print(path[i][0]);
-          //Serial.print(", ");
-          //Serial.println(path[i][1]);
-          //Serial.println();
+        path[i][0] = pth[i][0];
+        path[i][1] = pth[i][1];
+        //Serial.print(path[i][0]);
+        //Serial.print(", ");
+        //Serial.println(path[i][1]);
+        //Serial.println();
       }
       footSpeed = spd;
     }
-    
-    void updateAngs(){
+
+    void updateAngs() {
       if (steps == currStep) {
-       if (pathIndex != 9){
-         pathIndex++;
-       }
-       else{pathIndex = 0;}
-       /*
-       Serial.print("pathIndex: ");
-       Serial.println(pathIndex);
-       Serial.println();
-       Serial.println(path[pathIndex][0]);
-       Serial.println(path[pathIndex][1]);
-       Serial.println();
-       */
-       double distance = dist(hipXAngle, kneeAngle, path[pathIndex][0], path[pathIndex][1]);
-       /*
-       Serial.println();
-       Serial.println(path[pathIndex][0]);
-       Serial.println(path[pathIndex][1]);
-       Serial.println();
-      */
-       double t = (double) round(100*(distance/footSpeed))/100; 
-      /*
-       Serial.print("time: ");
-       Serial.print(t);
-       Serial.println(" seconds");
-      */
-       steps = t/0.01;
-       //Serial.print("steps: ");
-       //Serial.println(steps);   
-       hipXStep = (path[pathIndex][0] - hipXAngle)/steps;
-       /*
-       Serial.print("hipXStep: ");
-       Serial.print(hipXStep);
-       Serial.println(" deg");
-       */
-       kneeStep = (path[pathIndex][1] - kneeAngle)/steps;
-       /*
-       Serial.print("kneeStep: ");
-       Serial.print(kneeStep);
-       Serial.println(" deg");
-       */
-       if ((abs(hipXStep) > 6) || (abs(kneeStep) > 6)){
-        Serial.println("woah there buckaroo");
-        delay(100000);
-       }
-  
-       currStep = 0;
-       //Serial.print("currStep: ");
-       //Serial.println(0);
+        if (pathIndex != 9) {
+          pathIndex++;
+        }
+        else {
+          pathIndex = 0;
+        }
+        /*
+          Serial.print("pathIndex: ");
+          Serial.println(pathIndex);
+          Serial.println();
+          Serial.println(path[pathIndex][0]);
+          Serial.println(path[pathIndex][1]);
+          Serial.println();
+        */
+        double distance = dist(hipXAngle, kneeAngle, path[pathIndex][0], path[pathIndex][1]);
+        /*
+          Serial.println();
+          Serial.println(path[pathIndex][0]);
+          Serial.println(path[pathIndex][1]);
+          Serial.println();
+        */
+        double t = (double) round(100 * (distance / footSpeed)) / 100;
+        /*
+          Serial.print("time: ");
+          Serial.print(t);
+          Serial.println(" seconds");
+        */
+        steps = t / 0.01;
+        //Serial.print("steps: ");
+        //Serial.println(steps);
+        hipXStep = (path[pathIndex][0] - hipXAngle) / steps;
+        /*
+          Serial.print("hipXStep: ");
+          Serial.print(hipXStep);
+          Serial.println(" deg");
+        */
+        kneeStep = (path[pathIndex][1] - kneeAngle) / steps;
+        /*
+          Serial.print("kneeStep: ");
+          Serial.print(kneeStep);
+          Serial.println(" deg");
+        */
+        if ((abs(hipXStep) > 6) || (abs(kneeStep) > 6)) {
+          Serial.println("woah there buckaroo");
+          delay(100000);
+        }
+
+        currStep = 0;
+        //Serial.print("currStep: ");
+        //Serial.println(0);
       }
-      
+
       setYZ(hipXAngle + hipXStep, kneeAngle + kneeStep);
-      
+
       currStep++;
       //Serial.print("currStep: ");
       //Serial.println(currStep);
-        
+
     }
 
     // finds the distance in the YZ plane between 2 foot positions based on the IRLangles of the
     //hipX and knee servos before and after the movement
-    double dist(double prevHipX, double prevKnee, double newHipX, double newKnee){
-     /*
-      Serial.print("finding distance from current angles: (");
-      Serial.print(prevHipX);
-      Serial.print(", ");
-      Serial.print(prevKnee);
-      Serial.print(") to next angles: (");
-      Serial.print(newHipX);
-      Serial.print(", ");
-      Serial.print(newKnee);          
-      Serial.println(")");
+    double dist(double prevHipX, double prevKnee, double newHipX, double newKnee) {
+      /*
+        Serial.print("finding distance from current angles: (");
+        Serial.print(prevHipX);
+        Serial.print(", ");
+        Serial.print(prevKnee);
+        Serial.print(") to next angles: (");
+        Serial.print(newHipX);
+        Serial.print(", ");
+        Serial.print(newKnee);
+        Serial.println(")");
       */
-      double prevY = 2.165*cos(prevHipX*3.14/180)+2.675*cos(prevKnee*3.14/180);
-      double prevZ = 2.165*sin(prevHipX*3.14/180)+2.675*sin(prevKnee*3.14/180); 
+      double prevY = 2.165 * cos(prevHipX * 3.14 / 180) + 2.675 * cos(prevKnee * 3.14 / 180);
+      double prevZ = 2.165 * sin(prevHipX * 3.14 / 180) + 2.675 * sin(prevKnee * 3.14 / 180);
 
-      double currY = 2.165*cos(newHipX*3.14/180)+2.675*cos(newKnee*3.14/180);
-      double currZ = 2.165*sin(newHipX*3.14/180)+2.675*sin(newKnee*3.14/180);
+      double currY = 2.165 * cos(newHipX * 3.14 / 180) + 2.675 * cos(newKnee * 3.14 / 180);
+      double currZ = 2.165 * sin(newHipX * 3.14 / 180) + 2.675 * sin(newKnee * 3.14 / 180);
 
       double distance = sqrt(sq(currY - prevY) + sq(currZ - prevZ));
       /*
-      Serial.print("distance from current point: (");
-      Serial.print(prevY);
-      Serial.print(", ");
-      Serial.print(prevZ);
-      Serial.print(") to next point: (");
-      Serial.print(currY);
-      Serial.print(", ");
-      Serial.print(currZ);          
-      Serial.print(") is ");
-      Serial.print(distance);
-      Serial.println(" inches");
+        Serial.print("distance from current point: (");
+        Serial.print(prevY);
+        Serial.print(", ");
+        Serial.print(prevZ);
+        Serial.print(") to next point: (");
+        Serial.print(currY);
+        Serial.print(", ");
+        Serial.print(currZ);
+        Serial.print(") is ");
+        Serial.print(distance);
+        Serial.println(" inches");
       */
-      
+
       //1.6, 1.6, .56, 1.4, 2.0, 1.8, 1.5, .79, 1.6, 1.8
-     
+
       return distance;
     }
 };
@@ -236,7 +251,7 @@ Leg::Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark) {
   steps = 0;
   currStep = 0;
   footSpeed = 0.0;
-  
+
 }
 
 Leg::Leg() {
@@ -270,7 +285,7 @@ class Dog {
 
   public:
     Dog();
-  
+
     Dog(Leg frontLeft, Leg rearLeft, Leg rearRight, Leg frontRight);
 
     void setLegsYZ(double hipXAng, double kneeAng) {
@@ -282,7 +297,7 @@ class Dog {
 
 
       Serial.print("YZ set to: ");
-      Serial.print(hipXAng);    
+      Serial.print(hipXAng);
       Serial.print(", ");
       Serial.println(kneeAng);
       Serial.println();
@@ -307,7 +322,7 @@ class Dog {
       rr.zero();
       fr.zero();
 
-      Serial.println("Zeroed");    
+      Serial.println("Zeroed");
       Serial.println();
     }
 
@@ -317,7 +332,7 @@ class Dog {
       setLegsYZ(hipXAng, kneeAng);
 
       Serial.print("leg set to: ");
-      Serial.print(hipYAng);    
+      Serial.print(hipYAng);
       Serial.print(", ");
       Serial.print(hipXAng);
       Serial.print(", ");
@@ -326,84 +341,84 @@ class Dog {
     }
 
 
-    void loadGaitOne(double footSpeed){
+    void loadGaitOne(double footSpeed) {
       setHips(0);
-      
+
       int paths[4][10][2] = {
         //FL
         {
-        {199, 320},
-        {242, 346},
-        {287, 342},
-        {304, 322},
-        {273, 316},
-        {233, 299},
-        {218, 269},
-        {219, 237},
-        {189, 248},
-        {177, 279},
-                  },
-        //RL          
+          {199, 320},
+          {242, 346},
+          {287, 342},
+          {304, 322},
+          {273, 316},
+          {233, 299},
+          {218, 269},
+          {219, 237},
+          {189, 248},
+          {177, 279},
+        },
+        //RL
         {
-        {233, 299},
-        {218, 269},
-        {219, 237},
-        {189, 248},
-        {177, 279},
-        {199, 320},
-        {242, 346},
-        {287, 342},
-        {304, 322},
-        {273, 316},
-                  },
+          {233, 299},
+          {218, 269},
+          {219, 237},
+          {189, 248},
+          {177, 279},
+          {199, 320},
+          {242, 346},
+          {287, 342},
+          {304, 322},
+          {273, 316},
+        },
         //RR
         {
-        {199, 320},
-        {242, 346},
-        {287, 342},
-        {304, 322},
-        {273, 316},
-        {233, 299},
-        {218, 269},
-        {219, 237},
-        {189, 248},
-        {177, 279},
-                  },    
+          {199, 320},
+          {242, 346},
+          {287, 342},
+          {304, 322},
+          {273, 316},
+          {233, 299},
+          {218, 269},
+          {219, 237},
+          {189, 248},
+          {177, 279},
+        },
         //FR
         {
-        {233, 299},
-        {218, 269},
-        {219, 237},
-        {189, 248},
-        {177, 279},
-        {199, 320},
-        {242, 346},
-        {287, 342},
-        {304, 322},
-        {273, 316},
-                  }
+          {233, 299},
+          {218, 269},
+          {219, 237},
+          {189, 248},
+          {177, 279},
+          {199, 320},
+          {242, 346},
+          {287, 342},
+          {304, 322},
+          {273, 316},
+        }
       };
 
       setPaths(paths, footSpeed);
-      
+
     }
 
 
-    void updateLegAngs(){
+    void updateLegAngs() {
       fl.updateAngs();
       rl.updateAngs();
       rr.updateAngs();
       fr.updateAngs();
     }
 
-    void setPaths(int paths[4][10][2], double footSpeed){
+    void setPaths(int paths[4][10][2], double footSpeed) {
       fl.setPath(paths[0], footSpeed);
       rl.setPath(paths[1], footSpeed);
       rr.setPath(paths[2], footSpeed);
       fr.setPath(paths[3], footSpeed);
     }
 
-    void stand(){
+    void stand() {
       setLegs(0, 233, 299);
     }
 };
@@ -414,19 +429,19 @@ class Dog {
 //dog contructors
 
 Dog::Dog() {
-  
+
 }
 
 Dog::Dog(Leg frontLeft, Leg rearLeft, Leg rearRight, Leg frontRight) {
   fl = frontLeft;
   fl.zero();
-  
+
   rl = rearLeft;
   rl.zero();
-  
+
   rr = rearRight;
   rr.zero();
-  
+
   fr = frontRight;
   fr.zero();
 }
@@ -454,40 +469,62 @@ void setup() {
 
   Leg frontLeft;
   frontLeft = Leg(23, 25, 27, false);
- 
+
   Leg rearLeft;
   rearLeft = Leg(29, 31, 33, false);
- 
+
   Leg rearRight;
   rearRight = Leg(35, 37, 39, true);
-  
+
   Leg frontRight;
   frontRight = Leg(41, 43, 2, true);
-  
+
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
+
+
+  pinMode(11, INPUT);
+  digitalWrite(11, HIGH);
+  
+  pinMode(12, INPUT);
+  digitalWrite(12, HIGH);
+
+  pinMode(13, INPUT);
+  digitalWrite(13, HIGH);
+
+
 
 
   skorupi.zeroAll();
   delay(1000);
-  
+
   skorupi.stand();
   delay(3000);
-  
+
   skorupi.loadGaitOne(footSpeed);
 }
 
 
 
-
-
 void loop() {
-
   //skorupi.zeroAll();
-  //skorupi.setLegs(0,180, 180,footSpeed);
+
+  if (digitalRead(11) == LOW){
+    //skorupi.loadSit();
+  }
+
+  else if (digitalRead(12) == LOW){
+    //skorupi.loadStand();
+  }
+
+  else if (digitalRead(13) == LOW){
+    //skorupi.loadGaitOne(footSpeed);
+  }
+  
   skorupi.updateLegAngs();
   delay(10);
-  Serial.println();Serial.println();Serial.println();
+  /*
+  Serial.println(); Serial.println(); Serial.println();
   Serial.println("delayed .01 sec");
-  Serial.println();Serial.println();Serial.println();
-
+  Serial.println(); Serial.println(); Serial.println();
+  */
 }
