@@ -474,8 +474,7 @@ class Dog {
     }
 
     void loadGaitOne(double footSpeed) {
-      setHips(0);
-
+      
       int paths[4][10][2] = {
         //FL
         {
@@ -532,6 +531,9 @@ class Dog {
       };
 
       setPaths(paths, footSpeed);
+
+      stand();
+      delay(2000);
       Serial.println("gaitOne loaded");
     }
 
@@ -569,16 +571,12 @@ Dog::Dog() {
 
 Dog::Dog(Leg frontLeft, Leg rearLeft, Leg rearRight, Leg frontRight) {
   fl = frontLeft;
-  fl.zero();
 
   rl = rearLeft;
-  rl.zero();
-
+  
   rr = rearRight;
-  rr.zero();
 
   fr = frontRight;
-  fr.zero();
 }
 
 
@@ -618,13 +616,13 @@ void setup() {
 
 
   pinMode(11, INPUT);
-  digitalWrite(11, HIGH);
+  digitalWrite(11, LOW);
   
   pinMode(12, INPUT);
-  digitalWrite(12, HIGH);
+  digitalWrite(12, LOW);
 
   pinMode(13, INPUT);
-  digitalWrite(13, HIGH);
+  digitalWrite(13, LOW);
 
 
 
@@ -639,30 +637,24 @@ void setup() {
 }
 
 
-int sus = 1;
 void loop() {
   //skorupi.zeroAll();
 
-  //if (digitalRead(11) == LOW){
-  if (sus == 1){
+  if (digitalRead(11) == HIGH){
     Serial.println("11 low");
-    skorupi.loadGaitOne(footSpeed);
-    delay(3000);
-    sus++;
-  }
-/*
-  else if (digitalRead(12) == LOW){
-    Serial.println("12 low");
-    skorupi.loadStand(5);
-    delay(3000);
+    skorupi.loadSit(footSpeed);
   }
 
-  else if (digitalRead(13) == LOW){
+  else if (digitalRead(12) == HIGH){
+    Serial.println("12 low");
+    skorupi.loadStand(footSpeed);
+  }
+
+  else if (digitalRead(13) == HIGH){
     Serial.println("13 low");
     skorupi.loadGaitOne(footSpeed);
-    delay(3000);
   }
-*/
+
   skorupi.updateLegAngs();
   delay(10);
   /*
