@@ -637,13 +637,14 @@ void setup() {
   skorupi.stand();
   delay(3000);
 
-  skorupi.loadGaitOne(footSpeed);
+  skorupi.loadSit(footSpeed);
 }
 
 
 void loop() {
   //skorupi.zeroAll();
 
+/*
   if (digitalRead(11) == LOW){
     Serial.println("11 low");
     skorupi.loadSit(footSpeed);
@@ -658,12 +659,12 @@ void loop() {
     Serial.println("13 low");
     skorupi.loadGaitOne(footSpeed);
   }
-
+  */
   skorupi.updateLegAngs();
   delay(10);
-  /*
+                                                                                                                       
   //Serial.println(); //Serial.println(); //Serial.println();
   //Serial.println("delayed .01 sec");
   //Serial.println(); //Serial.println(); //Serial.println();
-  */
+
 }
