@@ -11,19 +11,20 @@ class Leg { //includes the three servos of the leg
     //as well as wether or not the leg is on the right or the left
 
   private:
+    String nombre;
 
     Servo hipY; //IRL Range: (280,80)
-    double hipYZero = 72.0; //Should be placed at IRL 0.0deg when zeroed
+    double hipYZero; //Should be placed at IRL 0.0deg when zeroed
     double hipYIRLZero = 0.0;
     double hipYAngle; //current IRL angle of limb
 
     Servo hipX; //IRL Range: (160,320)
-    double hipXZero = 116.0; //should be placed at IRL 270.0deg when zeroed
+    double hipXZero; //should be placed at IRL 270.0deg when zeroed
     double hipXIRLZero = 270.0;
     double hipXAngle; //current IRL angle of limb
 
     Servo knee; //IRL Range: (260,60) (based on knee frame of reference)
-    double kneeZero = 144.0; //should be placed at IRL 270.0deg when zeroed
+    double kneeZero; //should be placed at IRL 270.0deg when zeroed
     double kneeIRLZero = 90.0; //note: this servo has reversed polarity
     double kneeAngle; //current IRL angle of limb
 
@@ -38,7 +39,7 @@ class Leg { //includes the three servos of the leg
     double kneeStep;
 
   public:
-    Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark);
+    Leg(String nombre, int hipYPin, double hipYZ, int hipXPin, double hipXZ, int kneePin, double kneeZ, boolean onRightQuestionMark);
 
     Leg(int hipYPin);
 
@@ -55,23 +56,27 @@ class Leg { //includes the three servos of the leg
       //Serial.print("Knee to IRL: ");
       //Serial.println(kneeAng);
       */
-      kneeAng = (360 - kneeAng) - (kneeIRLZero - kneeZero) - (270.0 - hipXAng); //convert to correct servo value
-      hipXAng = hipXAng - (hipXIRLZero - hipXZero); //convert to correct servo value
+      
+      if (right) { //account for leg polarity
+        kneeAng = (360 - kneeAng) - (kneeIRLZero - kneeZero) - (270.0 - hipXAng); //convert to correct servo value
+        hipXAng = hipXAng - (hipXIRLZero - hipXZero); //convert to correct servo value
+      }
 
-      if (!right) { //account for leg polarity
-        hipXAng = 160.0 - hipXAng;
-        kneeAng = 160.0 - kneeAng;
+      else {
+        kneeAng = kneeAng - ((360-kneeIRLZero) - kneeZero) + (270.0 - hipXAng); //convert to correct servo value
+        hipXAng = (360 - hipXAng) - ((360 - hipXIRLZero) - hipXZero); //convert to correct servo value
       }
 
       hipX.writeMicroseconds(specialSauce(hipXAng));
       knee.writeMicroseconds(specialSauce(kneeAng));
-      /*
+      
         //Serial.println();
+        //Serial.println(nombre);
         //Serial.print("HipX to: ");
-        //Serial.println(hipXAng);
-        //Serial.print("Knee to: ");
+        //Serial.print(hipXAng);
+        //Serial.print(", Knee to: ");
         //Serial.println(kneeAng);
-      */
+      
     }
 
     void setHip(double ang) {
@@ -90,8 +95,13 @@ class Leg { //includes the three servos of the leg
         if (!right) {
           ang = 160.0 - ang;
        }
-      
        hipY.writeMicroseconds(specialSauce(ang));
+
+       //Serial.println();
+       //Serial.println(nombre);
+       //Serial.print("HipY to: ");
+       //Serial.print(ang);
+       //Serial.print(", ");
       }
       
     }
@@ -113,14 +123,14 @@ class Leg { //includes the three servos of the leg
     }
 
     void setPath(int pth[10][2], double spd) {
-      ////Serial.println("Path set to:");
+      //Serial.println("Path set to:");
       for (int i = 0; i < 10; i++) {
         path[i][0] = pth[i][0];
         path[i][1] = pth[i][1];
-        ////Serial.print(path[i][0]);
-        ////Serial.print(", ");
-        ////Serial.println(path[i][1]);
-        ////Serial.println();
+        //Serial.print(path[i][0]);
+        //Serial.print(", ");
+        //Serial.println(path[i][1]);
+        //Serial.println();
       }
       footSpeed = spd;
       currStep = 0;
@@ -242,15 +252,22 @@ class Leg { //includes the three servos of the leg
 
 
 
+
+
 //leg constructors
-Leg::Leg(int hipYPin, int hipXPin, int kneePin, boolean onRightQuestionMark) {
+Leg::Leg(String nm, int hipYPin, double hipYZ, int hipXPin, double hipXZ, int kneePin, double kneeZ, boolean onRightQuestionMark) {
+  nombre = nm;
+  
   hipY.attach(hipYPin);
+  hipYZero = hipYZ;
   hipYAngle = hipYZero;
 
   hipX.attach(hipXPin);
+  hipXZero = hipXZ;
   hipXAngle = hipXZero;
 
   knee.attach(kneePin);
+  kneeZero = kneeZ;
   kneeAngle = kneeZero;
 
   right = onRightQuestionMark;
@@ -604,16 +621,16 @@ void setup() {
   footSpeed = 8; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
-  frontLeft = Leg(23, 25, 27, false);
+  frontLeft = Leg("frontLeft", 23, 80.0,     25, 50.0,    27, 10.0, false);
 
   Leg rearLeft;
-  rearLeft = Leg(29, 31, 33, false);
+  rearLeft = Leg("rearLeft", 29, 80.0,    31, 50.0,    33, 10.0, false);
 
   Leg rearRight;
-  rearRight = Leg(35, 37, 39, true);
+  rearRight = Leg("rearRight", 35, 72.0,    37, 116.0,    39, 144.0, true);
 
   Leg frontRight;
-  frontRight = Leg(41, 43, 2, true);
+  frontRight = Leg("frontRight", 41, 72.0,    43, 116.0,    2, 144.0, true);
 //m1, m10, m12 don't work
 
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
@@ -637,7 +654,7 @@ void setup() {
   skorupi.stand();
   delay(3000);
 
-  skorupi.loadSit(footSpeed);
+  skorupi.loadStand(footSpeed);
 }
 
 
