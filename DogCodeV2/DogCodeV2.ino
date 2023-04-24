@@ -82,20 +82,27 @@ class Leg { //includes the three servos of the leg
     void setHip(double ang) {
 
       //checks if value is too high or too low and could cause internal collisions
-      if (((ang > 28) && (ang < 332)) || (ang > 360) || (ang < 0)) {
-        //Serial.println("woah there bucko that's too much... or too little");
+      //if (((ang > 28) && (ang < 332)) || (ang > 360) || (ang < 0)) {
+      if (0 != 0) {
+        Serial.println("woah there bucko that's too much... or too little");
         delay(100000);
       }
       
       else{
         hipYAngle = ang;
-        
-        ang = ang + hipYZero;
 
-        if (!right) {
-          ang = 160.0 - ang;
-       }
-       hipY.writeMicroseconds(specialSauce(ang));
+        if (right) {
+          ang = ang - (hipYIRLZero - hipYZero);
+          if (ang > 360){
+            ang -= 360;
+          }
+        }
+
+        else{
+          ang = ang - ((180 - hipYIRLZero) - hipYZero);
+        }
+       
+        hipY.writeMicroseconds(specialSauce(ang));
 
        //Serial.println();
        //Serial.println(nombre);
@@ -330,11 +337,19 @@ class Dog {
     }
 
     void setHips(double ang) {
-
-      fl.setHip(ang);
-      rl.setHip(ang);
       rr.setHip(ang);
       fr.setHip(ang);
+
+      if (ang < 180){
+        ang = 180 - ang;
+      }
+
+      else{
+        ang = 540 - ang;
+      }
+      
+      fl.setHip(ang);
+      rl.setHip(ang);
 
       //Serial.print("Hips set to: ");
       //Serial.println(ang);
@@ -368,7 +383,7 @@ class Dog {
 
      void loadSit(double footSpeed) {
       fl.setHip(0);
-      rl.setHip(16);
+      rl.setHip(164);
       rr.setHip(16);
       fr.setHip(0);
 
@@ -621,13 +636,13 @@ void setup() {
   footSpeed = 8; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
-  frontLeft = Leg("frontLeft", 23, 80.0,     25, 50.0,    27, 10.0, false);
+  frontLeft = Leg("frontLeft", 23, 80.0,     25, 55.0,    27, 5.0, false);
 
   Leg rearLeft;
-  rearLeft = Leg("rearLeft", 29, 80.0,    31, 50.0,    33, 10.0, false);
+  rearLeft = Leg("rearLeft", 29, 70.0,    31, 50.0,    33, 15.0, false);
 
   Leg rearRight;
-  rearRight = Leg("rearRight", 35, 72.0,    37, 116.0,    39, 144.0, true);
+  rearRight = Leg("rearRight", 35, 65.0,    37, 120.0,    39, 140.0, true);
 
   Leg frontRight;
   frontRight = Leg("frontRight", 41, 72.0,    43, 116.0,    2, 144.0, true);
@@ -648,20 +663,20 @@ void setup() {
 
 
 
-  skorupi.zeroAll();
+  //skorupi.zeroAll();
   delay(1000);
 
   skorupi.stand();
   delay(3000);
 
-  skorupi.loadStand(footSpeed);
+  skorupi.loadSit(footSpeed);
 }
 
 
 void loop() {
-  //skorupi.zeroAll();
+ //skorupi.zeroAll();
 
-
+/*
   if (digitalRead(11) == LOW){
     Serial.println("11 low");
     skorupi.loadSit(footSpeed);
@@ -676,10 +691,10 @@ void loop() {
     Serial.println("13 low");
     skorupi.loadGaitOne(footSpeed);
   }
-  
+  */   
   skorupi.updateLegAngs();
   delay(10);
-                                                                                                                       
+                                                                                                           
   //Serial.println(); //Serial.println(); //Serial.println();
   //Serial.println("delayed .01 sec");
   //Serial.println(); //Serial.println(); //Serial.println();
