@@ -636,13 +636,13 @@ void setup() {
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
 
 
-  pinMode(11, INPUT);
+  pinMode(11, INPUT_PULLUP);
   digitalWrite(11, HIGH);
   
-  pinMode(12, INPUT);
+  pinMode(12, INPUT_PULLUP);
   digitalWrite(12, HIGH);
 
-  pinMode(13, INPUT);
+  pinMode(13, INPUT_PULLUP);
   digitalWrite(13, HIGH);
 
 
@@ -661,7 +661,7 @@ void setup() {
 void loop() {
   //skorupi.zeroAll();
 
-/*
+
   if (digitalRead(11) == LOW){
     Serial.println("11 low");
     skorupi.loadSit(footSpeed);
@@ -676,7 +676,7 @@ void loop() {
     Serial.println("13 low");
     skorupi.loadGaitOne(footSpeed);
   }
-  */
+  
   skorupi.updateLegAngs();
   delay(10);
                                                                                                                        
