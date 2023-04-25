@@ -572,6 +572,76 @@ class Dog {
       //Serial.println("gaitOne loaded");
     }
 
+    void loadGaitTwo(double footSpeed) {
+      
+      int paths[4][10][2] = {
+        //FL
+        {
+          {259, 279},
+          {258, 262},
+          {235, 259},
+          {211, 260},
+          {191, 278},
+          {192, 298},
+          {224, 332},
+          {274, 323},
+          {278, 302},
+          {277, 282},
+        },
+        //RL
+        {
+          {258, 262},
+          {235, 259},
+          {211, 260},
+          {191, 278},
+          {192, 298},
+          {224, 332},
+          {274, 323},
+          {278, 302},
+          {277, 282},
+          {259, 279},
+        },
+        //RR
+        {
+          {235, 259},
+          {211, 260},
+          {191, 278},
+          {192, 298},
+          {224, 332},
+          {274, 323},
+          {278, 302},
+          {277, 282},
+          {259, 279},
+          {258, 262},
+        },
+        //FR
+        {
+          {211, 260},
+          {191, 278},
+          {192, 298},
+          {224, 332},
+          {274, 323},
+          {278, 302},
+          {277, 282},
+          {259, 279},
+          {258, 262},
+          {235, 259},
+        }
+      };
+
+      setPaths(paths, footSpeed);
+
+      setLegs(0, 259, 279);
+      delay(2000);
+      
+      fl.setYZ(paths[0][0][0], paths[0][0][1]);
+      rl.setYZ(paths[1][0][0], paths[0][0][1]);
+      rr.setYZ(paths[2][0][0], paths[0][0][1]);
+      fr.setYZ(paths[3][0][0], paths[0][0][1]);
+      delay(1000*(2.481/footSpeed));
+      //Serial.println("gaitOne loaded");
+    }
+
     void updateLegAngs() {
       fl.updateAngs();
       rl.updateAngs();
@@ -590,6 +660,12 @@ class Dog {
       setLegs(0, 233, 299);
     }
 
+    void sit() {
+      fl.set(0, 233, 299);
+      rl.set(164, 215, 320);
+      rr.set(16, 215, 320);
+      fr.set(0, 233, 299);
+    }
 
 };
 
@@ -633,7 +709,7 @@ void setup() {
   //comment this out because it slows down the dog a lot
   Serial.begin(9600);
 
-  footSpeed = 8; //footspeed in inches/s - may be limited by servo max speed
+  footSpeed = 3; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
   frontLeft = Leg("frontLeft", 23, 80.0,     25, 55.0,    27, 5.0, false);
@@ -664,17 +740,19 @@ void setup() {
 
 
   //skorupi.zeroAll();
-  delay(1000);
+
+  skorupi.sit();
+  delay(2000);
 
   skorupi.stand();
-  delay(3000);
+  delay(2000);
 
-  skorupi.loadSit(footSpeed);
+  skorupi.loadGaitTwo(footSpeed);
 }
 
 
 void loop() {
- //skorupi.zeroAll();
+ skorupi.zeroAll();
 
 /*
   if (digitalRead(11) == LOW){
@@ -692,7 +770,7 @@ void loop() {
     skorupi.loadGaitOne(footSpeed);
   }
   */   
-  skorupi.updateLegAngs();
+  //skorupi.updateLegAngs();
   delay(10);
                                                                                                            
   //Serial.println(); //Serial.println(); //Serial.println();
