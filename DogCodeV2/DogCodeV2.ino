@@ -741,18 +741,17 @@ void setup() {
 
   //skorupi.zeroAll();
 
-  skorupi.sit();
+  //skorupi.sit();
   delay(2000);
 
-  skorupi.stand();
+  //skorupi.stand();
   delay(2000);
-
-  skorupi.loadGaitTwo(footSpeed);
+  //skorupi.loadGaitTwo(footSpeed);
 }
 
 
 void loop() {
- skorupi.zeroAll();
+ //skorupi.zeroAll();
 
 /*
   if (digitalRead(11) == LOW){
