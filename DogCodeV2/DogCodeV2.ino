@@ -741,12 +741,12 @@ void setup() {
 
   //skorupi.zeroAll();
 
-  //skorupi.sit();
+  skorupi.sit();
   delay(2000);
 
-  //skorupi.stand();
+  skorupi.stand();
   delay(2000);
-  //skorupi.loadGaitTwo(footSpeed);
+  skorupi.loadGaitTwo(footSpeed);
 }
 
 
@@ -769,7 +769,7 @@ void loop() {
     skorupi.loadGaitOne(footSpeed);
   }
   */   
-  //skorupi.updateLegAngs();
+  skorupi.updateLegAngs();
   delay(10);
                                                                                                            
   //Serial.println(); //Serial.println(); //Serial.println();
