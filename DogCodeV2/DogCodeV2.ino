@@ -9,7 +9,7 @@
 
 class Leg { //includes the three servos of the leg
     //as well as wether or not the leg is on the right or the left
-
+ 
   private:
     String nombre;
 
@@ -744,8 +744,8 @@ void setup() {
   skorupi.sit();
   delay(2000);
 
-  skorupi.stand();
-  delay(2000);
+  //skorupi.stand();
+  //delay(2000);
   skorupi.loadGaitTwo(footSpeed);
 }
 
