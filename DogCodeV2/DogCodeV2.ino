@@ -45,7 +45,18 @@ class Leg { //includes the three servos of the leg
 
     Leg();
 
+    double getHipYAngle(){
+      return hipYAngle;
+    }
 
+    double getHipXAngle(){
+      return hipXAngle;
+    }
+
+    double getKneeAngle(){
+      return kneeAngle;
+    }
+    
     void setYZ(double hipXAng, double kneeAng) {
       hipXAngle = hipXAng;
       kneeAngle = kneeAng;
@@ -213,7 +224,7 @@ class Leg { //includes the three servos of the leg
 
     // finds the distance in the YZ plane between 2 foot positions based on the IRLangles of the
     //hipX and knee servos before and after the movement
-    double dist(double prevHipX, double prevKnee, double newHipX, double newKnee) {
+    static double dist(double prevHipX, double prevKnee, double newHipX, double newKnee) {
       
         //Serial.print("finding distance from current angles: (");
         //Serial.print(prevHipX);
@@ -354,6 +365,13 @@ class Dog {
       //Serial.print("Hips set to: ");
       //Serial.println(ang);
       //Serial.println();
+    }
+
+    void setHips(double flAng, double rlAng, double rrAng, double frAng) {
+      fl.setHip(flAng);
+      rl.setHip(rlAng);
+      rr.setHip(rrAng);
+      fr.setHip(frAng);
     }
 
     void zeroAll() {
@@ -659,14 +677,64 @@ class Dog {
     void stand() {
       setLegs(0, 233, 299);
     }
+/*
+    void sit(double footSpeed) {
+      
+      double distMax = 0;
+      double distTemp = 0;
+       
+      distTemp = fl.dist(fl.getHipXAngle(), fl.getKneeAngle(), 233, 299); 
+      if(distTemp>distMax){distMax = distTemp;}
+      
+      distTemp = rl.dist(rl.getHipXAngle(), rl.getKneeAngle(), 215, 320); 
+      if(distTemp>distMax){distMax = distTemp;}
+      
+      distTemp = rr.dist(rr.getHipXAngle(), rr.getKneeAngle(), 215, 320); 
+      if(distTemp>distMax){distMax = distTemp;}
+      
+      distTemp = fr.dist(fr.getHipXAngle(), fr.getKneeAngle(), 233, 299); 
+      if(distTemp>distMax){distMax = distTemp;}
 
-    void sit() {
-      fl.set(180, 233, 299);
-      rl.set(164, 215, 320);
-      rr.set(16, 215, 320);
-      fr.set(0, 233, 299);
+      if (distMax > 0.1){exit(1);}
+      
+      double t = (double) round(100 * (distMax / footSpeed)) / 100;
+
+      int steps = t / 0.01;
+      
+      fl.setSteps(t / 0.01);
+      rl.setSteps(t / 0.01);
+      rr.setSteps(t / 0.01);
+      fr.setSteps(t / 0.01);
+
+      fl.setCurrStep(0);
+      rl.setCurrStep(0);
+      rr.setCurrStep(0);
+      fr.setCurrStep(0);
+
+      fl.setHipXStep((233 - fl.getHipXAngle()) / steps);
+      fl.setKneeStep((299 - fl.getKneeAngle()) / steps);
+
+      rl.setHipXStep((215 - rl.getHipXAngle()) / steps);
+      rl.setKneeStep((320 - rl.getKneeAngle()) / steps);
+      
+      rr.setHipXStep((215 - rr.getHipXAngle()) / steps);
+      rr.setKneeStep((320 - rr.getHipXAngle()) / steps);
+
+      fr.setHipXStep((233 - fr.getHipXAngle()) / steps);
+      fr.setKneeStep((299 - fr.getHipXAngle()) / steps);
+
+      for (int i = 0; i < steps; i++){
+        if (abs(233 - fl.gethipXAngle())>0.1 ){
+          
+        }
+
+        delay(10);
+      }
+
+
+      setHips(180, 164, 16, 0);
     }
-
+*/
 };
 
 
@@ -709,10 +777,10 @@ void setup() {
   //comment this out because it slows down the dog a lot
   Serial.begin(9600);
 
-  footSpeed = 3; //footspeed in inches/s - may be limited by servo max speed
+  footSpeed = 5; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
-  frontLeft = Leg("frontLeft", 23, 80.0,     25, 55.0,    27, 5.0, false);
+  frontLeft = Leg("frontLeft", 23, 74.0,     25, 60.0,    27, 5.0, false);
 
   Leg rearLeft;
   rearLeft = Leg("rearLeft", 29, 70.0,    31, 50.0,    33, 15.0, false);
@@ -739,19 +807,20 @@ void setup() {
 
 
 
-  //skorupi.zeroAll();
+  skorupi.zeroAll();
 
-  skorupi.sit();
+  //skorupi.sit();
   delay(2000);
 
-  //skorupi.stand();
-  //delay(2000);
-  skorupi.loadGaitTwo(footSpeed);
+  skorupi.stand();
+  delay(2000);
+  skorupi.loadGaitOne
+  
+  (footSpeed);
 }
 
 
 void loop() {
- //skorupi.zeroAll();
 
 /*
   if (digitalRead(11) == LOW){
@@ -769,7 +838,8 @@ void loop() {
     skorupi.loadGaitOne(footSpeed);
   }
   */   
-  skorupi.updateLegAngs();
+  //skorupi.zeroAll();
+  //skorupi.updateLegAngs();
   delay(10);
                                                                                                            
   //Serial.println(); //Serial.println(); //Serial.println();
