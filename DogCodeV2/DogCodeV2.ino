@@ -56,6 +56,58 @@ class Leg { //includes the three servos of the leg
     double getKneeAngle(){
       return kneeAngle;
     }
+
+    double getHipXStep(){
+      return hipXStep;
+    }
+
+    double getKneeStep(){
+      return kneeStep;
+    }
+
+    void setSteps(int stps){
+      steps = stps;
+    }
+
+    void setCurrStep(int stp){
+      currStep = stp;
+    }
+
+    void setHipXStep(int stp){
+      hipXStep = stp;
+    }
+
+    void setKneeStep(int stp){
+      kneeStep = stp;
+    }
+
+    void setHipX(double hipXAng) {
+      hipXAngle = hipXAng;
+      
+      if (right) { //account for leg polarity
+        hipXAng = hipXAng - (hipXIRLZero - hipXZero); //convert to correct servo value
+      }
+
+      else {
+        hipXAng = (360 - hipXAng) - ((360 - hipXIRLZero) - hipXZero); //convert to correct servo value
+      }
+
+      hipX.writeMicroseconds(specialSauce(hipXAng));
+    }
+
+    void setKnee(double kneeAng) {
+      kneeAngle = kneeAng;
+      
+      if (right) { //account for leg polarity
+        kneeAng = (360 - kneeAng) - (kneeIRLZero - kneeZero) - (270.0 - hipXAngle); //convert to correct servo value
+      }
+
+      else {
+        kneeAng = kneeAng - ((360-kneeIRLZero) - kneeZero) + (270.0 - hipXAngle); //convert to correct servo value
+      }
+
+      knee.writeMicroseconds(specialSauce(kneeAng));
+    }
     
     void setYZ(double hipXAng, double kneeAng) {
       hipXAngle = hipXAng;
@@ -590,6 +642,8 @@ class Dog {
       //Serial.println("gaitOne loaded");
     }
 
+
+
     void loadGaitTwo(double footSpeed) {
       
       int paths[4][10][2] = {
@@ -657,8 +711,80 @@ class Dog {
       rr.setYZ(paths[2][0][0], paths[0][0][1]);
       fr.setYZ(paths[3][0][0], paths[0][0][1]);
       delay(1000*(2.481/footSpeed));
-      //Serial.println("gaitOne loaded");
+      //Serial.println("gaitTwo loaded");
     }
+
+    void loadGaitThree(double footSpeed) {
+      
+      int paths[4][10][2] = {
+        //FL
+        {
+          {216, 270},
+          {214, 290},
+          {239, 316},
+          {292, 303},
+          {289, 293},
+          {277, 282},
+          {259, 279},
+          {258, 262},
+          {247, 251},
+          {235, 247},
+        },
+        //RL
+        {
+          {247, 251},
+          {235, 247},
+          {216, 270},
+          {214, 290},
+          {239, 316},
+          {292, 303},
+          {289, 293},
+          {277, 282},
+          {259, 279},
+          {258, 262},
+        },
+        //RR
+        {
+          {292, 303},
+          {289, 293},
+          {277, 282},
+          {259, 279},
+          {258, 262},
+          {247, 251},
+          {235, 247},
+          {216, 270},
+          {214, 290},
+          {239, 316},
+        },
+        //FR
+        {
+          {277, 282},
+          {259, 279},
+          {258, 262},
+          {247, 251},
+          {235, 247},
+          {216, 270},
+          {214, 290},
+          {239, 316},
+          {292, 303},
+          {289, 293},
+        }
+      };
+
+      setPaths(paths, footSpeed);
+
+      setLegs(0, 259, 279);
+      delay(2000);
+      
+      fl.setYZ(paths[0][0][0], paths[0][0][1]);
+      rl.setYZ(paths[1][0][0], paths[0][0][1]);
+      rr.setYZ(paths[2][0][0], paths[0][0][1]);
+      fr.setYZ(paths[3][0][0], paths[0][0][1]);
+      delay(1000*(2.335/footSpeed));
+      //Serial.println("gaitThree loaded");
+    }
+
+    
 
     void updateLegAngs() {
       fl.updateAngs();
@@ -677,7 +803,7 @@ class Dog {
     void stand() {
       setLegs(0, 233, 299);
     }
-/*
+/**/
     void sit(double footSpeed) {
       
       double distMax = 0;
@@ -701,15 +827,15 @@ class Dog {
 
       int steps = t / 0.01;
       
-      fl.setSteps(t / 0.01);
-      rl.setSteps(t / 0.01);
-      rr.setSteps(t / 0.01);
-      fr.setSteps(t / 0.01);
+      //fl.setSteps(t / 0.01);
+      //rl.setSteps(t / 0.01);
+      //rr.setSteps(t / 0.01);
+      //fr.setSteps(t / 0.01);
 
-      fl.setCurrStep(0);
-      rl.setCurrStep(0);
-      rr.setCurrStep(0);
-      fr.setCurrStep(0);
+      //fl.setCurrStep(0);
+      //rl.setCurrStep(0);
+      //rr.setCurrStep(0);
+      //fr.setCurrStep(0);
 
       fl.setHipXStep((233 - fl.getHipXAngle()) / steps);
       fl.setKneeStep((299 - fl.getKneeAngle()) / steps);
@@ -724,8 +850,35 @@ class Dog {
       fr.setKneeStep((299 - fr.getHipXAngle()) / steps);
 
       for (int i = 0; i < steps; i++){
-        if (abs(233 - fl.gethipXAngle())>0.1 ){
-          
+        if (abs(233 - fl.getHipXAngle())>0.1 ){
+          fl.setHipX(fl.getHipXAngle()+fl.getHipXStep());
+        }
+        if (abs(299 - fl.getKneeAngle())>0.1 ){
+          fl.setKnee(fl.getKneeAngle()+fl.getKneeStep());
+        }
+
+
+        if (abs(215 - rl.getHipXAngle())>0.1 ){
+          fl.setHipX(rl.getHipXAngle()+rl.getHipXStep());
+        }
+        if (abs(320 - rl.getKneeAngle())>0.1 ){
+          fl.setKnee(rl.getKneeAngle()+rl.getKneeStep());
+        }
+
+
+        if (abs(215 - rr.getHipXAngle())>0.1 ){
+          fl.setHipX(rr.getHipXAngle()+rr.getHipXStep());
+        }
+        if (abs(320 - rr.getKneeAngle())>0.1 ){
+          fl.setKnee(rr.getKneeAngle()+rr.getKneeStep());
+        }
+
+  
+        if (abs(233 - fr.getHipXAngle())>0.1 ){
+          fl.setHipX(fr.getHipXAngle()+fr.getHipXStep());
+        }
+        if (abs(299 - fr.getKneeAngle())>0.1 ){
+          fl.setKnee(fr.getKneeAngle()+fr.getKneeStep());
         }
 
         delay(10);
@@ -734,7 +887,7 @@ class Dog {
 
       setHips(180, 164, 16, 0);
     }
-*/
+
 };
 
 
@@ -809,14 +962,12 @@ void setup() {
 
   skorupi.zeroAll();
 
-  //skorupi.sit();
+  //skorupi.sit(footSpeed);
   delay(2000);
 
-  skorupi.stand();
+  //skorupi.stand();
   delay(2000);
-  skorupi.loadGaitOne
-  
-  (footSpeed);
+  skorupi.loadGaitOne(footSpeed);
 }
 
 
@@ -839,7 +990,7 @@ void loop() {
   }
   */   
   //skorupi.zeroAll();
-  //skorupi.updateLegAngs();
+  skorupi.updateLegAngs();
   delay(10);
                                                                                                            
   //Serial.println(); //Serial.println(); //Serial.println();
