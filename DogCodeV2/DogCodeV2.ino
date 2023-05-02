@@ -84,9 +84,9 @@ class Leg { //includes the three servos of the leg
     void setHipX(double hipXAng) {
       hipXAngle = hipXAng;
 
-      Serial.print(nombre);
-      Serial.print("'s hipX to ");
-      Serial.println(hipXAng);
+      //Serial.print(nombre);
+      //Serial.print("'s hipX to ");
+      //Serial.println(hipXAng);
       
       if (right) { //account for leg polarity
         hipXAng = hipXAng - (hipXIRLZero - hipXZero); //convert to correct servo value
@@ -101,9 +101,9 @@ class Leg { //includes the three servos of the leg
 
     void setKnee(double kneeAng) {
       
-      Serial.print(nombre);
-      Serial.print("'s knee to ");
-      Serial.println(kneeAng);
+      //Serial.print(nombre);
+      //Serial.print("'s knee to ");
+      //Serial.println(kneeAng);
       
       kneeAngle = kneeAng;
       
@@ -758,6 +758,7 @@ class Dog {
         },
         //RR
         {
+          {239, 316},
           {292, 303},
           {289, 293},
           {277, 282},
@@ -767,11 +768,9 @@ class Dog {
           {235, 247},
           {216, 270},
           {214, 290},
-          {239, 316},
         },
         //FR
         {
-          {277, 282},
           {259, 279},
           {258, 262},
           {247, 251},
@@ -781,6 +780,7 @@ class Dog {
           {239, 316},
           {292, 303},
           {289, 293},
+          {277, 282},
         }
       };
 
@@ -816,7 +816,100 @@ class Dog {
     void stand() {
       setLegs(0, 233, 299);
     }
-/**/
+
+    void stand(double footSpeed) {
+      
+      setHips(180, 164, 16, 0);
+      fl.setYZ(215, 320);
+      rl.setYZ(215, 320);
+      rr.setYZ(215, 320);
+      fr.setYZ(215, 320);
+      delay(2000);
+      
+      setHips(180, 180, 0, 0);
+      
+      double distMax = 0;
+      double distTemp = 0;
+       
+      distTemp = fl.dist(fl.getHipXAngle(), fl.getKneeAngle(), 233, 299); 
+      if(distTemp>distMax){distMax = distTemp;}
+      
+      distTemp = rl.dist(rl.getHipXAngle(), rl.getKneeAngle(), 233, 299); 
+      if(distTemp>distMax){distMax = distTemp;}
+      
+      distTemp = rr.dist(rr.getHipXAngle(), rr.getKneeAngle(), 233, 299); 
+      if(distTemp>distMax){distMax = distTemp;}
+      
+      distTemp = fr.dist(fr.getHipXAngle(), fr.getKneeAngle(), 233, 299); 
+      if(distTemp>distMax){distMax = distTemp;}
+
+      if (distMax < 0.1){exit(1);}
+      
+      double t = (double) round(100 * (distMax / footSpeed)) / 100;
+
+      int steps = t / 0.01;
+      
+      //fl.setSteps(t / 0.01);
+      //rl.setSteps(t / 0.01);
+      //rr.setSteps(t / 0.01);
+      //fr.setSteps(t / 0.01);
+
+      //fl.setCurrStep(0);
+      //rl.setCurrStep(0);
+      //rr.setCurrStep(0);
+      //fr.setCurrStep(0);
+
+      double diff = 0;
+      
+      fl.setHipXStep((233 - fl.getHipXAngle()) / steps);
+      fl.setKneeStep((299 - fl.getKneeAngle()) / steps);
+
+      rl.setHipXStep((233 - rl.getHipXAngle()) / steps);
+      rl.setKneeStep((299 - rl.getKneeAngle()) / steps);
+      
+      rr.setHipXStep((233 - rr.getHipXAngle()) / steps);
+      rr.setKneeStep((299 - rr.getKneeAngle()) / steps);
+
+      fr.setHipXStep((233 - fr.getHipXAngle()) / steps);
+      fr.setKneeStep((299 - fr.getKneeAngle()) / steps);
+
+      for (int i = 0; i < steps; i++){
+        if (abs(233 - fl.getHipXAngle())>0.1 ){
+          fl.setHipX(fl.getHipXAngle()+fl.getHipXStep());
+        }
+        if (abs(299 - fl.getKneeAngle())>0.1 ){
+          fl.setKnee(fl.getKneeAngle()+fl.getKneeStep());
+        }
+
+
+        if (abs(233 - rl.getHipXAngle())>0.1 ){
+          rl.setHipX(rl.getHipXAngle()+rl.getHipXStep());
+        }
+        if (abs(299 - rl.getKneeAngle())>0.1 ){
+          rl.setKnee(rl.getKneeAngle()+rl.getKneeStep());
+        }
+
+
+        if (abs(233 - rr.getHipXAngle())>0.1 ){
+          rr.setHipX(rr.getHipXAngle()+rr.getHipXStep());
+        }
+        if (abs(299 - rr.getKneeAngle())>0.1 ){
+          rr.setKnee(rr.getKneeAngle()+rr.getKneeStep());
+        }
+
+  
+        if (abs(233 - fr.getHipXAngle())>0.1 ){
+          fr.setHipX(fr.getHipXAngle()+fr.getHipXStep());
+        }
+        if (abs(299 - fr.getKneeAngle())>0.1 ){
+          fr.setKnee(fr.getKneeAngle()+fr.getKneeStep());
+        }
+
+        delay(10);
+      }
+    }
+
+
     void sit(double footSpeed) {
       
       double distMax = 0;
@@ -975,8 +1068,7 @@ void setup() {
 
   skorupi.zeroAll();
   delay(2000);
-  
-  skorupi.sit(footSpeed);
+  skorupi.stand(footSpeed);
   delay(2000);
 
   //skorupi.stand();
@@ -1003,8 +1095,8 @@ void loop() {
     skorupi.loadGaitOne(footSpeed);
   }
   */   
-  skorupi.zeroAll();
-  //skorupi.updateLegAngs();
+  //skorupi.zeroAll();
+  skorupi.updateLegAngs();
   delay(10);
                                                                                                            
   //Serial.println(); //Serial.println(); //Serial.println();
