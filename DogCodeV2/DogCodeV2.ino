@@ -819,7 +819,7 @@ class Dog {
 
     void stand(double footSpeed) {
       
-      setHips(180, 164, 16, 0);
+      setHips(164, 164, 16, 16);
       fl.setYZ(215, 320);
       rl.setYZ(215, 320);
       rr.setYZ(215, 320);
