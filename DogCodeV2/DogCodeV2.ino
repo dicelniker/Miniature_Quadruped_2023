@@ -797,6 +797,75 @@ class Dog {
       //Serial.println("gaitThree loaded");
     }
 
+    void loadGaitFour(double footSpeed) {
+      
+      int paths[4][10][2] = {
+        //FL
+        {
+          {239, 316},
+          {239, 316},
+          {239, 316},
+          {277, 282},
+          {259, 279},
+          {258, 262},
+          {258, 262},
+          {258, 262},
+          {258, 262},
+          {214, 290},
+        },
+        //RL
+        {
+          {277, 282},
+          {259, 279},
+          {258, 262},
+          {258, 262},
+          {258, 262},
+          {258, 262},
+          {214, 290},
+          {239, 316},
+          {239, 316},
+          {239, 316},
+        },
+        //RR
+        {
+          {258, 262},
+          {258, 262},
+          {258, 262},
+          {258, 262},
+          {214, 290},
+          {239, 316},
+          {239, 316},
+          {239, 316},
+          {277, 282},
+          {259, 279},
+        },
+        //FR
+        {
+          {214, 290},
+          {239, 316},
+          {239, 316},
+          {239, 316},
+          {277, 282},
+          {259, 279},
+          {258, 262},
+          {258, 262},
+          {258, 262},
+          {258, 262},
+        }
+      };
+
+      setPaths(paths, footSpeed);
+
+      setLegs(0, 259, 279);
+      delay(2000);
+      
+      fl.setYZ(paths[0][0][0], paths[0][0][1]);
+      rl.setYZ(paths[1][0][0], paths[0][0][1]);
+      rr.setYZ(paths[2][0][0], paths[0][0][1]);
+      fr.setYZ(paths[3][0][0], paths[0][0][1]);
+      delay(1000*(1.336/footSpeed));
+      //Serial.println("gaitFour loaded");
+    }
     
 
     void updateLegAngs() {
@@ -1073,7 +1142,7 @@ void setup() {
 
   //skorupi.stand();
   delay(2000);
-  skorupi.loadGaitThree(footSpeed);
+  skorupi.loadGaitFour(footSpeed);
 }
 
 
