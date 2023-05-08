@@ -267,6 +267,7 @@ class Leg { //includes the three servos of the leg
         if (distance < 0.1){
           hipXStep = 0;
           kneeStep = 0;
+          steps = 1;
         }
         
         if ((abs(hipXStep) > 6) || (abs(kneeStep) > 6)) {
@@ -720,9 +721,9 @@ class Dog {
       delay(2000);
       
       fl.setYZ(paths[0][0][0], paths[0][0][1]);
-      rl.setYZ(paths[1][0][0], paths[0][0][1]);
-      rr.setYZ(paths[2][0][0], paths[0][0][1]);
-      fr.setYZ(paths[3][0][0], paths[0][0][1]);
+      rl.setYZ(paths[1][0][0], paths[1][0][1]);
+      rr.setYZ(paths[2][0][0], paths[2][0][1]);
+      fr.setYZ(paths[3][0][0], paths[3][0][1]);
       delay(1000*(2.481/footSpeed));
       //Serial.println("gaitTwo loaded");
     }
@@ -790,9 +791,9 @@ class Dog {
       delay(2000);
       
       fl.setYZ(paths[0][0][0], paths[0][0][1]);
-      rl.setYZ(paths[1][0][0], paths[0][0][1]);
-      rr.setYZ(paths[2][0][0], paths[0][0][1]);
-      fr.setYZ(paths[3][0][0], paths[0][0][1]);
+      rl.setYZ(paths[1][0][0], paths[1][0][1]);
+      rr.setYZ(paths[2][0][0], paths[2][0][1]);
+      fr.setYZ(paths[3][0][0], paths[3][0][1]);
       delay(1000*(2.335/footSpeed));
       //Serial.println("gaitThree loaded");
     }
@@ -802,6 +803,7 @@ class Dog {
       int paths[4][10][2] = {
         //FL
         {
+          {214, 290},
           {239, 316},
           {239, 316},
           {239, 316},
@@ -811,10 +813,12 @@ class Dog {
           {258, 262},
           {258, 262},
           {258, 262},
-          {214, 290},
         },
         //RL
         {
+          {239, 316},
+          {239, 316},
+          {239, 316},
           {277, 282},
           {259, 279},
           {258, 262},
@@ -822,9 +826,6 @@ class Dog {
           {258, 262},
           {258, 262},
           {214, 290},
-          {239, 316},
-          {239, 316},
-          {239, 316},
         },
         //RR
         {
@@ -841,16 +842,16 @@ class Dog {
         },
         //FR
         {
-          {214, 290},
-          {239, 316},
-          {239, 316},
-          {239, 316},
           {277, 282},
           {259, 279},
           {258, 262},
           {258, 262},
           {258, 262},
           {258, 262},
+          {214, 290},
+          {239, 316},
+          {239, 316},
+          {239, 316},
         }
       };
 
@@ -860,9 +861,9 @@ class Dog {
       delay(2000);
       
       fl.setYZ(paths[0][0][0], paths[0][0][1]);
-      rl.setYZ(paths[1][0][0], paths[0][0][1]);
-      rr.setYZ(paths[2][0][0], paths[0][0][1]);
-      fr.setYZ(paths[3][0][0], paths[0][0][1]);
+      rl.setYZ(paths[1][0][0], paths[1][0][1]);
+      rr.setYZ(paths[2][0][0], paths[2][0][1]);
+      fr.setYZ(paths[3][0][0], paths[3][0][1]);
       delay(1000*(1.336/footSpeed));
       //Serial.println("gaitFour loaded");
     }
@@ -1105,19 +1106,19 @@ void setup() {
   //comment this out because it slows down the dog a lot
   Serial.begin(9600);
 
-  footSpeed = 5; //footspeed in inches/s - may be limited by servo max speed
+  footSpeed = 3; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
-  frontLeft = Leg("frontLeft", 23, 74.0,     25, 60.0,    27, 5.0, false);
+  frontLeft = Leg("frontLeft", 23, 74.0,     25, 60.0,    27, 1.0, false);
 
   Leg rearLeft;
-  rearLeft = Leg("rearLeft", 29, 70.0,    31, 50.0,    33, 15.0, false);
+  rearLeft = Leg("rearLeft", 29, 70.0,    31, 50.0,    33, 20.0, false);
 
   Leg rearRight;
-  rearRight = Leg("rearRight", 35, 65.0,    37, 120.0,    39, 140.0, true);
+  rearRight = Leg("rearRight", 35, 65.0,    37, 120.0,    39, 134.0, true);
 
   Leg frontRight;
-  frontRight = Leg("frontRight", 41, 72.0,    43, 116.0,    2, 144.0, true);
+  frontRight = Leg("frontRight", 41, 72.0,    43, 112.0,    2, 148.0, true);
 //m1, m10, m12 don't work
 
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
@@ -1135,13 +1136,11 @@ void setup() {
 
 
 
-  skorupi.zeroAll();
-  delay(2000);
+  //skorupi.zeroAll();
+  //delay(2000);
   skorupi.stand(footSpeed);
-  delay(2000);
-
-  //skorupi.stand();
-  delay(2000);
+  //delay(2000);
+  //delay(2000);
   skorupi.loadGaitFour(footSpeed);
 }
 
