@@ -212,7 +212,7 @@ class Leg { //includes the three servos of the leg
           steps = -1*(path[pathIndex][0]/10);
           hipXStep = 0;
           kneeStep = 0;
-          Serial.println(steps);
+          //Serial.println(steps);
         }
 
         else{
