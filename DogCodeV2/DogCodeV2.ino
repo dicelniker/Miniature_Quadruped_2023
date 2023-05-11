@@ -197,6 +197,7 @@ class Leg { //includes the three servos of the leg
       footSpeed = spd;
       currStep = 0;
       steps = 0;
+      pathIndex = 0;
     }
 
     void updateAngs() {
@@ -397,24 +398,24 @@ class Dog {
     }
 
      void loadSit(double footSpeed) {
-      fl.setHip(0);
+      fl.setHip(164);
       rl.setHip(164);
       rr.setHip(16);
-      fr.setHip(0);
+      fr.setHip(16);
 
       int paths[4][10][2] = {
         //FL
         {
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
         },
         //RL
         {
@@ -444,16 +445,16 @@ class Dog {
         },
         //FR
         {
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
-          {233, 299},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
+          {215, 320},
         }
       };
 
@@ -1158,7 +1159,7 @@ void setup() {
   //comment this out because it slows down the dog a lot
   Serial.begin(9600);
 
-  footSpeed = 3; //footspeed in inches/s - may be limited by servo max speed
+  footSpeed = 2; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
   frontLeft = Leg("frontLeft", 23, 74.0,     25, 60.0,    27, 1.0, false);
@@ -1192,14 +1193,14 @@ void setup() {
   //delay(2000);
   skorupi.stand(footSpeed);
   //delay(2000);
-  //delay(2000);
-  skorupi.loadGaitSix(footSpeed);
+  delay(2000);
+  skorupi.loadStand(footSpeed);
 }
 
 
 void loop() {
 
-/*
+
   if (digitalRead(11) == LOW){
     Serial.println("11 low");
     skorupi.loadSit(footSpeed);
@@ -1209,10 +1210,10 @@ void loop() {
     Serial.println("12 low");
     skorupi.loadStand(footSpeed);
   }
-
+/*
   else if (digitalRead(13) == LOW){
     Serial.println("13 low");
-    skorupi.loadGaitOne(footSpeed);
+    skorupi.loadGaitSeven(footSpeed);
   }
   */   
   //skorupi.zeroAll();
