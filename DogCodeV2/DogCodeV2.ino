@@ -869,7 +869,77 @@ class Dog {
       delay(1000*(2.481/footSpeed));
       //Serial.println("gaitFive loaded");
     }
-    
+
+
+    void loadGaitSix(double footSpeed) {
+      
+      int paths[4][10][2] = {
+        //FL
+        {
+          {238, 295},
+          {238, 295},
+          {-1000*(8.1/footSpeed), 0},
+          {215, 326},
+          {288, 340},
+          {301, 303},
+          {-1000*(5.6/footSpeed), 0},
+          {262, 308},
+          {238, 295},
+          {-1000*(5.6/footSpeed), 0},
+        },
+        //RL
+        {
+          {238, 295},
+          {238, 295},
+          {238, 295},
+          {238, 295},
+          {215, 326},
+          {288, 340},
+          {301, 303},
+          {262, 308},
+          {238, 295},
+          {-1000*(19.3/footSpeed), 0},
+        },
+        //RR
+        {
+          {238, 295},
+          {238, 295},
+          {238, 295},
+          {-1000*(13.7/footSpeed), 0},
+          {215, 326},
+          {288, 340},
+          {301, 303},
+          {262, 308},
+          {238, 295},
+          {-1000*(5.6/footSpeed), 0},
+        },
+        //FR
+        {
+          {301, 303},
+          {-1000*(5.6/footSpeed), 0},
+          {262, 308},
+          {238, 295},
+          {238, 295},
+          {238, 295},
+          {238, 295},
+          {-1000*(13.7/footSpeed), 0},
+          {215, 326},
+          {288, 340},
+        }
+      };
+
+      setPaths(paths, footSpeed);
+
+      setLegs(0, 238, 295);
+      delay(2000);
+      
+      fl.setYZ(paths[0][0][0], paths[0][0][1]);
+      rl.setYZ(paths[1][0][0], paths[1][0][1]);
+      rr.setYZ(paths[2][0][0], paths[2][0][1]);
+      fr.setYZ(paths[3][0][0], paths[3][0][1]);
+      delay(1000*(2.56/8));
+      //Serial.println("gaitFive loaded");
+    }
 
     void updateLegAngs() {
       fl.updateAngs();
