@@ -1193,7 +1193,7 @@ void setup() {
   skorupi.stand(footSpeed);
   //delay(2000);
   //delay(2000);
-  skorupi.loadGaitFive(footSpeed);
+  skorupi.loadGaitSix(footSpeed);
 }
 
 
