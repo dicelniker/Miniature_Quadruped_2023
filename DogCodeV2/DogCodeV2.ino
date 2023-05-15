@@ -947,9 +947,10 @@ class Dog {
       int paths[4][10][2] = {
         //FL
         {
+          {209, 305},
           { -1000 * (9.7 / footSpeed), 0},
           {181, 313},
-          {263, 360},
+          //{263, 360},
           {296, 331},
           { -1000 * (5.3 / footSpeed), 0},
           {298, 308},
@@ -962,8 +963,9 @@ class Dog {
         {
           {209, 305},
           {209, 305},
+          {209, 305},
           {181, 313},
-          {263, 360},
+          //{263, 360},
           {296, 331},
           {298, 308},
           {267, 306},
@@ -974,9 +976,10 @@ class Dog {
         //RR
         {
           {209, 305},
+          {209, 305},
           { -1000 * (15.0 / footSpeed), 0},
           {181, 313},
-          {263, 360},
+          //{263, 360},
           {296, 331},
           {298, 308},
           {267, 306},
@@ -988,6 +991,7 @@ class Dog {
         {
           {296, 331},
           {296, 331},
+          {296, 331},
           { -1000 * (5.3 / footSpeed), 0},
           {298, 308},
           {267, 306},
@@ -995,17 +999,16 @@ class Dog {
           {209, 305},
           { -1000 * (15.0 / footSpeed), 0},
           {181, 313},
-          {263, 360},
+          //{263, 360},
         }
       };
-      stand(footSpeed);
       
       setPaths(paths, footSpeed);
       
       setLegs(0, 209, 305);
       delay(2000);
 
-      fl.setYZ(209, 305);
+      fl.setYZ(paths[0][0][0], paths[0][0][1]);
       rl.setYZ(paths[1][0][0], paths[1][0][1]);
       rr.setYZ(paths[2][0][0], paths[2][0][1]);
       fr.setYZ(paths[3][0][0], paths[3][0][1]);
@@ -1250,7 +1253,7 @@ void setup() {
   //comment this out because it slows down the dog a lot
   Serial.begin(9600);
 
-  footSpeed = 2; //footspeed in inches/s - may be limited by servo max speed
+  footSpeed = 6; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
   frontLeft = Leg("frontLeft", 23, 74.0,     25, 60.0,    27, 1.0, false);
