@@ -947,59 +947,55 @@ class Dog {
       int paths[4][10][2] = {
         //FL
         {
-          {209, 305},
-          { -1000 * (9.7 / footSpeed), 0},
-          {181, 313},
-          //{263, 360},
-          {296, 331},
-          { -1000 * (5.3 / footSpeed), 0},
-          {298, 308},
-          {267, 306},
-          {236, 304},
-          {209, 305},
-          { -1000 * (5.3 / footSpeed), 0},
+          {214, 303},
+          { -1000 * (7.9 / footSpeed), 0},
+          {203, 308},
+          {326, 292},
+          { -1000 * (3.9 / footSpeed), 0},
+          {298, 305},
+          {299, 272},
+          {236, 301},
+          {214, 303},
+          { -1000 * (3.9 / footSpeed), 0},
         },
         //RL
         {
-          {209, 305},
-          {209, 305},
-          {209, 305},
-          {181, 313},
-          //{263, 360},
-          {296, 331},
-          {298, 308},
-          {267, 306},
-          {236, 304},
-          {209, 305},
-          { -1000 * (20.3 / footSpeed), 0},
+          {214, 303},
+          {214, 303},
+          {214, 303},
+          {203, 308},
+          {326, 292},
+          {298, 305},
+          {299, 272},
+          {236, 301},
+          {214, 303},
+          { -1000 * (15.7 / footSpeed), 0},
         },
         //RR
         {
-          {209, 305},
-          {209, 305},
-          { -1000 * (15.0 / footSpeed), 0},
-          {181, 313},
-          //{263, 360},
-          {296, 331},
-          {298, 308},
-          {267, 306},
-          {236, 304},
-          {209, 305},
-          { -1000 * (5.3 / footSpeed), 0},
+          {214, 303},
+          {214, 303},
+          { -1000 * (11.8 / footSpeed), 0},
+          {203, 308},
+          {326, 292},
+          {298, 305},
+          {299, 272},
+          {236, 301},
+          {214, 303},
+          { -1000 * (3.9 / footSpeed), 0},
         },
         //FR
         {
-          {296, 331},
-          {296, 331},
-          {296, 331},
-          { -1000 * (5.3 / footSpeed), 0},
-          {298, 308},
-          {267, 306},
-          {236, 304},
-          {209, 305},
-          { -1000 * (15.0 / footSpeed), 0},
-          {181, 313},
-          //{263, 360},
+          {326, 292},
+          {326, 292},
+          {326, 292},
+          { -1000 * (3.9 / footSpeed), 0},
+          {298, 305},
+          {299, 272},
+          {236, 301},
+          {214, 303},
+          { -1000 * (11.8 / footSpeed), 0},
+          {203, 308},
         }
       };
       
@@ -1253,19 +1249,19 @@ void setup() {
   //comment this out because it slows down the dog a lot
   Serial.begin(9600);
 
-  footSpeed = 6; //footspeed in inches/s - may be limited by servo max speed
+  footSpeed = 1; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
-  frontLeft = Leg("frontLeft", 23, 74.0,     25, 60.0,    27, 1.0, false);
+  frontLeft = Leg("frontLeft", 23, 76.0,     25, 60.0,    27, 1.0, false);
 
   Leg rearLeft;
   rearLeft = Leg("rearLeft", 29, 70.0,    31, 50.0,    33, 20.0, false);
 
   Leg rearRight;
-  rearRight = Leg("rearRight", 35, 65.0,    37, 120.0,    39, 134.0, true);
+  rearRight = Leg("rearRight", 35, 60.0,    37, 123.0,    39, 134.0, true);
 
   Leg frontRight;
-  frontRight = Leg("frontRight", 41, 72.0,    43, 112.0,    2, 148.0, true);
+  frontRight = Leg("frontRight", 41, 68.0,    43, 123.0,    2, 155.0, true);
   //m1, m10, m12 don't work
 
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
