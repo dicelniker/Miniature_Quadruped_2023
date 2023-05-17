@@ -45,6 +45,18 @@ class Leg { //includes the three servos of the leg
 
     Leg();
 
+    double getHipYIRLZero(){
+      return hipYIRLZero;
+    }
+
+    double getHipXIRLZero(){
+      return hipXIRLZero;
+    }
+
+    double getKneeIRLZero(){
+      return kneeIRLZero;
+    }
+
     double getHipYAngle() {
       return hipYAngle;
     }
@@ -396,6 +408,72 @@ class Dog {
 
       //Serial.print("leg set to: "); Serial.print(hipYAng); Serial.print(", "); Serial.print(hipXAng); Serial.print(", "); Serial.println(kneeAng); Serial.println();
     }
+
+    void loadZero(double footSpeed) {
+      fl.setHip(180-fl.getHipYIRLZero());
+      rl.setHip(180-rl.getHipYIRLZero());
+      rr.setHip(rr.getHipYIRLZero());
+      fr.setHip(fr.getHipYIRLZero());
+
+      int paths[4][10][2] = {
+        //FL
+        {
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+          {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
+        },
+        //RL
+        {
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+          {rl.getHipXIRLZero(), rl.getKneeIRLZero()},
+        },
+        //RR
+        {
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+          {rr.getHipXIRLZero(), rr.getKneeIRLZero()},
+        },
+        //FR
+        {
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+          {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
+        }
+      };
+
+      setPaths(paths, footSpeed);
+      //Serial.println("Zero loaded");
+    }
+
 
     void loadSit(double footSpeed) {
       fl.setHip(164);
@@ -1018,7 +1096,7 @@ class Dog {
         //FL
         {
           {213, 304},
-          { -1000 * (3.7 / footSpeed), 0},
+          { -1000 * (6.9 / footSpeed), 0},//
           {191, 312},
           {253, 329},
           { -1000 * (3.2 / footSpeed), 0},
@@ -1039,13 +1117,13 @@ class Dog {
           {265, 289},
           {242, 291},
           {213, 304},
-          { -1000 * (10.1 / footSpeed), 0},
+          { -1000 * (13.3 / footSpeed), 0},//
         },
         //RR
         {
           {213, 304},
           {213, 304},
-          { -1000 * (6.9 / footSpeed), 0},
+          { -1000 * (10.1 / footSpeed), 0},//
           {191, 312},
           {253, 329},
           {270, 303},
@@ -1064,7 +1142,7 @@ class Dog {
           {265, 289},
           {242, 291},
           {213, 304},
-          { -1000 * (6.9 / footSpeed), 0},
+          { -1000 * (10.1 / footSpeed), 0},
           {191, 312},
         }
       };
@@ -1100,6 +1178,10 @@ class Dog {
 
     void stand() {
       setLegs(0, 233, 299);
+    }
+
+    void sit() {
+      setLegs(5, 220, 360);
     }
 
     void stand(double footSpeed) {
@@ -1321,19 +1403,19 @@ void setup() {
   //comment this out because it slows down the dog a lot
   Serial.begin(9600);
 
-  footSpeed = 1; //footspeed in inches/s - may be limited by servo max speed
+  footSpeed = 3; //footspeed in inches/s - may be limited by servo max speed
 
   Leg frontLeft;
-  frontLeft = Leg("frontLeft", 23, 76.0,     25, 60.0,    27, 1.0, false);
+  frontLeft = Leg("frontLeft", 23, 76.0,     25, 60.0,    27, -5.0, false);
 
   Leg rearLeft;
-  rearLeft = Leg("rearLeft", 29, 70.0,    31, 50.0,    33, 20.0, false);
+  rearLeft = Leg("rearLeft", 29, 70.0,    31, 50.0,    33, 26.0, false);
 
   Leg rearRight;
-  rearRight = Leg("rearRight", 35, 60.0,    37, 123.0,    39, 134.0, true);
+  rearRight = Leg("rearRight", 35, 60.0,    37, 120.0,    39, 129.0, true);
 
   Leg frontRight;
-  frontRight = Leg("frontRight", 41, 68.0,    43, 123.0,    2, 155.0, true);
+  frontRight = Leg("frontRight", 41, 68.0,    43, 123.0,    2, 154.0, true);
   //m1, m10, m12 don't work
 
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
@@ -1348,24 +1430,31 @@ void setup() {
   pinMode(13, INPUT_PULLUP);
   digitalWrite(13, HIGH);
 
-
-
-
-  //skorupi.zeroAll();
-  //delay(2000);
-  skorupi.stand(footSpeed);
-  //delay(2000);
-  delay(2000);
-  skorupi.loadStand(footSpeed);
+  skorupi.sit();
 }
 
-
+boolean on = false;
 void loop() {
 
+  if((!on) && ((digitalRead(11) == LOW) || 
+               (digitalRead(12) == LOW) ||
+               (digitalRead(13) == LOW))){
+    on = true;
+    skorupi.stand(footSpeed);
+    delay(2000);
+    skorupi.loadStand(footSpeed); 
+  }
 
   if (digitalRead(11) == LOW) {
-    Serial.println("11 low");
-    skorupi.loadSit(footSpeed);
+    if (digitalRead(13) == LOW){
+    Serial.println("11 and 13 low");
+    skorupi.loadZero(footSpeed);
+    delay(1000);
+  }
+    else{
+      Serial.println("11 low");
+      skorupi.loadSit(footSpeed);
+    }
   }
 
   else if (digitalRead(12) == LOW) {
@@ -1375,11 +1464,13 @@ void loop() {
   
   else if (digitalRead(13) == LOW){
     Serial.println("13 low");
-    skorupi.loadGaitSeven(footSpeed);
+    skorupi.loadGaitEight(footSpeed);
   }
 
   //skorupi.zeroAll();
-  skorupi.updateLegAngs();
+  if(on){
+    skorupi.updateLegAngs();
+  }
   delay(10);
 
   //Serial.println(); Serial.println(); Serial.println(); Serial.println("delayed .01 sec"); Serial.println(); Serial.println(); Serial.println();
