@@ -1447,10 +1447,16 @@ void loop() {
 
   if (digitalRead(11) == LOW) {
     if (digitalRead(13) == LOW){
-    Serial.println("11 and 13 low");
-    skorupi.loadZero(footSpeed);
-    delay(1000);
-  }
+      Serial.println("11 and 13 low");
+      skorupi.loadZero(footSpeed);
+      delay(1000);
+    }
+    
+    else if (digitalRead(12) == LOW){
+      Serial.println("11 and 12 low");
+      footSpeed+=0.5;
+      delay(1000);
+    }
     else{
       Serial.println("11 low");
       skorupi.loadSit(footSpeed);
@@ -1458,8 +1464,15 @@ void loop() {
   }
 
   else if (digitalRead(12) == LOW) {
-    Serial.println("12 low");
-    skorupi.loadStand(footSpeed);
+    if (digitalRead(13) == LOW){
+      Serial.println("12 and 13 low");
+      footSpeed-=0.5;
+      delay(1000);
+    }
+    else{
+      Serial.println("12 low");
+      skorupi.loadStand(footSpeed);
+    }
   }
   
   else if (digitalRead(13) == LOW){
