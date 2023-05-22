@@ -410,12 +410,67 @@ class Dog {
     }
 
     void loadZero(double footSpeed) {
-      fl.setHip(180-fl.getHipYIRLZero());
+      /*fl.setHip(180-fl.getHipYIRLZero());
       rl.setHip(180-rl.getHipYIRLZero());
       rr.setHip(rr.getHipYIRLZero());
-      fr.setHip(fr.getHipYIRLZero());
+      fr.setHip(fr.getHipYIRLZero());*/
+
+      zeroAll();
 
       int paths[4][10][2] = {
+        //FL
+        {
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+        },
+        //RL
+        {
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+        },
+        //RR
+        {
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+        },
+        //FR
+        {
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+          {-100.0, 0},
+        }
+/*        
         //FL
         {
           {fl.getHipXIRLZero(), fl.getKneeIRLZero()},
@@ -468,6 +523,7 @@ class Dog {
           {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
           {fr.getHipXIRLZero(), fr.getKneeIRLZero()},
         }
+*/
       };
 
       setPaths(paths, footSpeed);
@@ -1415,7 +1471,7 @@ void setup() {
   rearRight = Leg("rearRight", 35, 60.0,    37, 120.0,    39, 129.0, true);
 
   Leg frontRight;
-  frontRight = Leg("frontRight", 41, 68.0,    43, 123.0,    2, 154.0, true);
+  frontRight = Leg("frontRight", 41, 68.0,    43, 123.0,    3, 154.0, true);
   //m1, m10, m12 don't work
 
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
@@ -1445,16 +1501,17 @@ void loop() {
     skorupi.loadStand(footSpeed); 
   }
 
-  if (digitalRead(11) == LOW) {
-    if (digitalRead(13) == LOW){
+  if (digitalRead(13) == LOW) {
+    if (digitalRead(12) == LOW){
       Serial.println("11 and 13 low");
       skorupi.loadZero(footSpeed);
       delay(1000);
     }
     
-    else if (digitalRead(12) == LOW){
+    else if (digitalRead(11) == LOW){
       Serial.println("11 and 12 low");
-      footSpeed+=0.5;
+      footSpeed-=0.5;
+      Serial.println(footSpeed);
       delay(1000);
     }
     else{
@@ -1463,10 +1520,11 @@ void loop() {
     }
   }
 
-  else if (digitalRead(12) == LOW) {
-    if (digitalRead(13) == LOW){
+  else if (digitalRead(11) == LOW) {
+    if (digitalRead(12) == LOW){
       Serial.println("12 and 13 low");
-      footSpeed-=0.5;
+      footSpeed+=0.5;
+      Serial.println(footSpeed);
       delay(1000);
     }
     else{
@@ -1475,7 +1533,7 @@ void loop() {
     }
   }
   
-  else if (digitalRead(13) == LOW){
+  else if (digitalRead(12) == LOW){
     Serial.println("13 low");
     skorupi.loadGaitEight(footSpeed);
   }
