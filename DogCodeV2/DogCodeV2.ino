@@ -1419,7 +1419,6 @@ void setup() {
 
   Leg frontRight;
   frontRight = Leg("frontRight", 41, 68.0,    43, 123.0,    3, 154.0, true);
-  //m1, m10, m12 don't work
 
   skorupi = Dog(frontLeft, rearLeft, rearRight, frontRight);
 
